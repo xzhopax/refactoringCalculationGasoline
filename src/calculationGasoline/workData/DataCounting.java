@@ -1,4 +1,4 @@
-package calculationGasoline.menu;
+package calculationGasoline.workData;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,15 +10,12 @@ public class DataCounting {
     public static double getAllGas() {
         return allGas;
     }
-
     public static void setAllGas(double allGas) {
         DataCounting.allGas = allGas;
     }
-
     public static double getAllMoney() {
         return allMoney;
     }
-
     public static void setAllMoney(double allMoney) {
         DataCounting.allMoney = allMoney;
     }
@@ -49,12 +46,10 @@ public class DataCounting {
 //    }// end resetResultGas
 
     /**
-     * findInFileGasAndMoney(String str) - searches the history file for gasoline and the money spent on it,
-     * for writing them into variables to display all costs.
-     * @param str - accepts a string as input to search for money or gasoline.
+     * findInFileGas(String str) - searches the history file for gasoline spent on it,
+     * for writing his into variable to display all costs.
+     * @param str - accepts a string as input to search for gasoline.
      */
-
-
     protected void findInFileGas(String str){
         String s1;
         String reportString;
@@ -62,7 +57,6 @@ public class DataCounting {
         Pattern pattern = Pattern.compile(regex1);
         Matcher matcher1 = pattern.matcher(str);
 
-        // find gas
         while (matcher1.find()) {
             s1 = matcher1.group();
             String[] arrOfStr = s1.split(":\\s?");
@@ -73,15 +67,19 @@ public class DataCounting {
                     setAllGas(countNumber(Double.parseDouble(s), getAllGas()));
                 }
             }
-        }//end while find gas
-    }
+        }
+    }//end find gas
 
+    /**
+     * findInFileMoney(String str) - searches the history file for money   spent ,
+     * for writing them into variable to display all costs.
+     * @param str - accepts a string as input to search for money.
+     */
     protected void findInFileMoney(String str){
         String s2;
         String regex2 = "(Денег\\s*:\\s*(\\d+,?(\\d*)))";
         Matcher matcher2 = Pattern.compile(regex2).matcher(str);
 
-        //find money
         while (matcher2.find()) {
             s2 = matcher2.group();
             String[] arrOfStr = s2.split(":\\s?");
@@ -92,11 +90,10 @@ public class DataCounting {
                     setAllMoney(countNumber(Double.parseDouble(s), getAllMoney()));
                 }
             }
-        } //end while find money
+        }
+    } //end find money
 
 
-
-    }
 
 
 

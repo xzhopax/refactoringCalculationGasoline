@@ -1,4 +1,6 @@
-package calculationGasoline.panel;
+package calculationGasoline.panelsProgram;
+
+import calculationGasoline.cars.VolkswagenPolo;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
@@ -11,7 +13,7 @@ import java.awt.event.WindowEvent;
  */
 
 public class MenuGUI extends JFrame {
-    Car car = new Car();
+    VolkswagenPolo vwPolo = new VolkswagenPolo();
     private JButton inCity;
     private JButton onHighway;
     private JButton showHistory;

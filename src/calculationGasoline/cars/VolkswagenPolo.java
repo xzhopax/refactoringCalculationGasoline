@@ -1,8 +1,7 @@
 package calculationGasoline.cars;
 
-import calculationGasoline.road.GasolineСonsumption;
 
-public class VolkswagenPolo extends Car implements ActionСar, GasolineСonsumption {
+public class VolkswagenPolo extends Car implements ActionCar, MovementInCity, MovementOnHighway {
 
 
     private final double[] ARRAY_FUEL_CONSUMPTION_FROM_ROAD_LOAD_1_10
@@ -14,125 +13,136 @@ public class VolkswagenPolo extends Car implements ActionСar, GasolineСonsumpt
 
     private final StringBuilder sb = new StringBuilder();
     private String date = "";
-    private double price = 0, distance = 0, speed = 0, gas = 0, resultGas = 0, midGasoline = 0;
+    private double price = 0, distance = 5, speed = 0, gas = 0, resultGas = 0, midGasoline = 0;
     private int traffic = 0;
     private boolean conditioner = true, dynamicDriving = true;
 
     //Getter and Setter
-    private double[] getARRAY_FUEL_CONSUMPTION_FROM_ROAD_LOAD_1_10 () {
+    protected double[] getARRAY_FUEL_CONSUMPTION_FROM_ROAD_LOAD_1_10 () {
         return ARRAY_FUEL_CONSUMPTION_FROM_ROAD_LOAD_1_10 ;
     }
-    private double[] getARRAY_FUEL_CONSUMPTION_CAR_SPEED() {
+    protected double[] getARRAY_FUEL_CONSUMPTION_CAR_SPEED() {
         return ARRAY_FUEL_CONSUMPTION_CAR_SPEED;
     }
     private StringBuilder getSb() {
         return sb;
     }
-    private String getDate() {
-        return date;
-    }
-    private void setDate(String date) {
-        this.date = date;
-    }
-    private double getPrice() {
-        return price;
-    }
-    private void setPrice(double price) {
-        this.price = price;
-    }
-    private double getDistance() {
+
+    public double getDistance() {
         return distance;
     }
-    private void setDistance(double distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
-    private double getSpeed() {
+    public double getSpeed() {
         return speed;
     }
-    private void setSpeed(double speed) {
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
-    private double getGas() {
+    public double getGas() {
         return gas;
     }
-    private void setGas(double gas) {
+    public void setGas(double gas) {
         this.gas = gas;
     }
-    private double getResultGas() {
-        return resultGas;
-    }
-    private void setResultGas(double resultGas) {
-        this.resultGas = resultGas;
-    }
-    private double getMidGasoline() {
-        return midGasoline;
-    }
-    private void setMidGasoline(double midGasoline) {
-        this.midGasoline = midGasoline;
-    }
-    private int getTraffic() {
-        return traffic;
-    }
-    private void setTraffic(int traffic) {
-        this.traffic = traffic;
-    }
-    private boolean isConditioner() {
+
+
+
+    public boolean isConditioner() {
         return conditioner;
     }
-    private void setConditioner(boolean conditioner) {
+    public void setConditioner(boolean conditioner) {
         this.conditioner = conditioner;
     }
-    private boolean isDynamicDriving() {
+    public boolean isDynamicDriving() {
         return dynamicDriving;
     }
-    private void setDynamicDriving(boolean dynamicDriving) {
+    public void setDynamicDriving(boolean dynamicDriving) {
         this.dynamicDriving = dynamicDriving;
     }
     //End Getter and Setter
 
 
-//    public VolkswagenPolo
-//            (String date, double price, double distance, int traffic, boolean conditioner, boolean dynamicDriving) {
-//        this.date = date;
-//        this.price = price;
-//        this.distance = distance;
-//        this.traffic = traffic;
-//        this.conditioner = conditioner;
-//        this.dynamicDriving = dynamicDriving;
-//    }
-    //(double speed, double distance, double price, boolean conditioner, boolean dynamicDriving)
 
-//    public VolkswagenPolo
-//            (String date, double price, double distance, double speed, boolean conditioner, boolean dynamicDriving) {
-//        this.date = date;
-//        this.price = price;
-//        this.distance = distance;
-//        this.speed = speed;
-//        this.conditioner = conditioner;
-//        this.dynamicDriving = dynamicDriving;
-//    }
-
+    /**
+     * void onOffConditioner - Sets the condition of air conditioner
+     * @param conditionerOn - condition conditioner
+     */
     @Override
     public void onOffConditioner(boolean conditionerOn) {
-        if (conditionerOn) {
-            if (getTraffic() != 0) setGas(getGas()
-                    + getARRAY_FUEL_CONSUMPTION_FROM_ROAD_LOAD_1_10()[traffic - 1] + 0.5);
-            else setGas(getGas() + getMidGasoline() + 0.5);
-        }
+        setConditioner(conditionerOn);
     }
+
+    /**
+     * void onOffDynamicDriving - Sets the state of dynamic driving
+     * @param dynamicDriving - condition conditioner
+     */
 
     @Override
-    public void onOffDynamicDriving(boolean dynamicDriving){
-        if (dynamicDriving) setGas(getGas() + 2.0);
-        if (getTraffic() == 0 && getMidGasoline() == 0) setGas(0);
+    public void onOffDynamicDriving(boolean dynamicDriving) {
+        setDynamicDriving(dynamicDriving);
     }
 
-    protected void priceInCityGAS(){
-        onOffConditioner(isConditioner());
-        onOffDynamicDriving(isDynamicDriving());
-        setGas((getGas() / 100) * distance);
-        setResultGas(getGas() * getPrice()); // gasolinePrice --> getPrice()
+    /**
+     * double ReturnGasolineConsumptionWithCarSpeed - calculates gas mileage depending on speed (VW polo)
+     * @param speed - takes your average speed at the entrance
+     * @return - returns gas mileage depending on input speed
+     */
+    @Override
+    public double ReturnGasolineConsumptionWithCarSpeed(double speed) {
+        if (speed <= 10 && speed > 0) {
+            return getARRAY_FUEL_CONSUMPTION_CAR_SPEED()[0];
+        } else if (speed <= 20) {
+            return getARRAY_FUEL_CONSUMPTION_CAR_SPEED()[1];
+        } else if (speed <= 30) {
+            return getARRAY_FUEL_CONSUMPTION_CAR_SPEED()[2];
+        } else if (speed <= 40) {
+            return getARRAY_FUEL_CONSUMPTION_CAR_SPEED()[3];
+        } else if (speed <= 60) {
+            return getARRAY_FUEL_CONSUMPTION_CAR_SPEED()[4];
+        } else if (speed <= 80) {
+            return getARRAY_FUEL_CONSUMPTION_CAR_SPEED()[5];
+        } else if (speed <= 100) {
+            return getARRAY_FUEL_CONSUMPTION_CAR_SPEED()[6];
+        } else if (speed <= 120) {
+            return getARRAY_FUEL_CONSUMPTION_CAR_SPEED()[7];
+        } else if (speed <= 150) {
+            return getARRAY_FUEL_CONSUMPTION_CAR_SPEED()[8];
+        } else if (speed <= 200) {
+            return getARRAY_FUEL_CONSUMPTION_CAR_SPEED()[9];
+        } else return 0;
     }
+
+
+
+
+
+    //    @Override
+//    public void onOffConditioner(boolean conditionerOn) {
+//        if (conditionerOn) {
+//            if (getTraffic() != 0) setGas(getGas()
+//                    + getARRAY_FUEL_CONSUMPTION_FROM_ROAD_LOAD_1_10()[traffic - 1] + 0.5);
+//            else setGas(getGas() + getMidGasoline() + 0.5);
+//        }
+//    }
+//
+//    @Override
+//    public void onOffDynamicDriving(boolean dynamicDriving){
+//        if (dynamicDriving) setGas(getGas() + 2.0);
+//        if (getTraffic() == 0 && getMidGasoline() == 0) setGas(0);
+//    }
+//
+//    protected void priceInCityGAS(){
+//        onOffConditioner(isConditioner());
+//        onOffDynamicDriving(isDynamicDriving());
+//        setGas((getGas() / 100) * distance);
+//        setResultGas(getGas() * getPrice()); // gasolinePrice --> getPrice()
+//    }
+
+
+
+
 
 
 

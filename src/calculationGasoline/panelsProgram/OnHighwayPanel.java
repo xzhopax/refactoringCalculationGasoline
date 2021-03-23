@@ -1,4 +1,10 @@
-package calculationGasoline.panel;
+package calculationGasoline.panelsProgram;
+
+import calculationGasoline.cars.OnBoardComputerCar;
+import calculationGasoline.cars.VolkswagenPolo;
+import calculationGasoline.stationGas.StationGAS;
+import calculationGasoline.workData.Check;
+import calculationGasoline.workData.CheckingEnteredData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,7 +50,10 @@ public class OnHighwayPanel extends JFrame {
     private JLabel distanceQuestion;
     private JLabel priceQuestion;
 
-    Car car = new Car();
+    VolkswagenPolo vwPolo = new VolkswagenPolo();
+    StationGAS stationGAS = new StationGAS();
+    OnBoardComputerCar onBoardComputerCar = new OnBoardComputerCar(vwPolo, stationGAS);
+    Check check = new CheckingEnteredData();
 
     /**
      *1. The constructor creates a panel with the specified parameters;
@@ -100,8 +109,8 @@ public class OnHighwayPanel extends JFrame {
 
             @Override
             public void focusLost(FocusEvent e) {
-                getCar().todayDate(getTextDate().getText());
-                if (getCar().getDate().equals("")) {
+                date.todayDate(getTextDate().getText());
+                if (date.getDate().equals("")) {
                     getErrorDate().setForeground(Color.RED);
                     getErrorDate().setText("Неправильно введена дата");
                     getTextDate().setText("");
@@ -125,7 +134,7 @@ public class OnHighwayPanel extends JFrame {
                         && Double.parseDouble(getTextSpeed().getText()) <= 200
                         || getTextSpeed().getText().matches("\\d+")
                         && Integer.parseInt(getTextSpeed().getText()) <= 200) {
-                    getCar().setSpeed(getCar().validDouble(getTextSpeed().getText()));
+                    vwPolo.setSpeed(check.validDoubleInString(getTextSpeed().getText()));
                     getErrorSpeed().setText("");
                 } else {
                     //
@@ -149,7 +158,7 @@ public class OnHighwayPanel extends JFrame {
                 // if the string number is double or an integer, then we write it to the variable distance
                 if (getTextDistance().getText().matches("(\\d+(\\.?\\d+))")
                         || getTextDistance().getText().matches("\\d+")) {
-                    getCar().setDistance(getCar().validDouble(getTextDistance().getText()));
+                    vwPolo.setDistance(check.validDoubleInString(getTextDistance().getText()));
                     getErrorDistance().setText("");
 
                 } else {
@@ -172,7 +181,7 @@ public class OnHighwayPanel extends JFrame {
                 //if the string number is double or an integer, then we write it to the variable price
                 if (getTextPrice().getText().matches("(\\d+(\\.?\\d+))")
                         || getTextPrice().getText().matches("\\d+")) {
-                    getCar().setPrice(getCar().validDouble(getTextPrice().getText()));
+                    getCar().setPrice(check.validDoubleInString(getTextPrice().getText()));
                     getErrorPrice().setText("");
                 } else {
                     getErrorPrice().setForeground(Color.RED);

@@ -1,8 +1,5 @@
 package calculationGasoline.road;
 
-import calculationGasoline.cars.ActionСar;
-import calculationGasoline.cars.VolkswagenPolo;
-
 public class Highway implements GasolineСonsumption {
 
     public void priceGasolineRefuelingOnHighway

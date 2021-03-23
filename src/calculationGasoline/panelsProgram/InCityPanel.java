@@ -1,6 +1,13 @@
-package calculationGasoline.panel;
+package calculationGasoline.panelsProgram;
 
+import calculationGasoline.cars.ActionCar;
+import calculationGasoline.cars.Car;
+import calculationGasoline.cars.OnBoardComputerCar;
 import calculationGasoline.cars.VolkswagenPolo;
+import calculationGasoline.stationGas.StationGAS;
+import calculationGasoline.workData.Check;
+import calculationGasoline.workData.CheckingEnteredData;
+import calculationGasoline.workData.DataCounting;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,11 +56,16 @@ public class InCityPanel extends JFrame {
     private JRadioButton beMidGasoline;
     private JRadioButton beTraffic;
 
-    VolkswagenPolo vwPolo = new VolkswagenPolo();
+    Car car = new VolkswagenPolo();
+    StationGAS stationGAS = new StationGAS();
+    OnBoardComputerCar onBoardComputerCar = new OnBoardComputerCar(car,stationGAS);
+    Check check = new CheckingEnteredData();
+    DataCounting dataCounting = new DataCounting();
 
-    public VolkswagenPolo getVwPolo() {
-        return vwPolo;
-    }
+
+
+
+
 
     /**
      * 1.The constructor creates a panel with the specified parameters;
@@ -86,6 +98,7 @@ public class InCityPanel extends JFrame {
         setVisible(true);// show panel
         add(getPanel());
 
+
         //I catch the program cross to confirm the exit
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent arg0) {
@@ -109,8 +122,8 @@ public class InCityPanel extends JFrame {
 
             @Override
             public void focusLost(FocusEvent e) {
-                vwPolo.todayDate(getTextDate().getText());
-                if (vwPolo.getDate().equals("")) {
+                check.isDateValidInString (getTextDate().getText());
+                if (getDate().equals("")) {
                     getErrorDate().setForeground(Color.RED);
                     getErrorDate().setText("Неправильно введена дата");
                     getTextDate().setText("");
@@ -134,7 +147,7 @@ public class InCityPanel extends JFrame {
                 // if the string number is double or an integer, then we write it to the variable distance
                 if (getTextDistance().getText().matches("(\\d+(\\.?\\d+))")
                         || getTextDistance().getText().matches("\\d+")) {
-                    vwPolo.setDistance(getCar().validDouble(getTextDistance().getText()));
+                    car.setDistance(check.validDoubleInString(getTextDistance().getText()));
                     getErrorDistance().setText("");
 
                 } else {
@@ -158,7 +171,7 @@ public class InCityPanel extends JFrame {
 
                 getTextTraffic().setEnabled(true);
                 getTextMidGasoline().setEnabled(false);
-                car.setMidGasoline(0);
+                onBoardComputerCar.setMidGasoline(0);
                 getTextMidGasoline().setText("0");
                 getBeTraffic().setSelected(true);
 
@@ -178,7 +191,7 @@ public class InCityPanel extends JFrame {
                                 && Integer.parseInt(getTextTraffic().getText()) < 11
                                     && Integer.parseInt(getTextTraffic().getText()) >= 0) {
 
-                            getCar().setTraffic(getCar().validInteger(getTextTraffic().getText()));
+                            onBoardComputerCar.setTraffic(check.validIntegerInString(getTextTraffic().getText()));
                             getErrorTraffic().setText("");
                             getErrorMidGasoline().setText("");
 
@@ -199,7 +212,7 @@ public class InCityPanel extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 getTextMidGasoline().setEnabled(true);
                 getTextTraffic().setEnabled(false);
-                car.setTraffic(0);
+                onBoardComputerCar.setTraffic(0);
                 getTextTraffic().setText("0");
                 getBeMidGasoline().setSelected(true);
 
@@ -217,7 +230,7 @@ public class InCityPanel extends JFrame {
                         if (getTextMidGasoline().getText().matches("(\\d+(\\.?\\d+))")
                                 || getTextMidGasoline().getText().matches("\\d+")) {
 
-                            getCar().setMidGasoline(getCar().validDouble(getTextMidGasoline().getText()));
+                            onBoardComputerCar.setMidGasoline(check.validDoubleInString(getTextMidGasoline().getText()));
                             getErrorMidGasoline().setText("");
                             getErrorTraffic().setText("");
 
@@ -244,7 +257,7 @@ public class InCityPanel extends JFrame {
                 // if the string number is double or an integer, then we write it to the variable price
                 if (getTextPrice().getText().matches("(\\d+(\\.?\\d+))")
                         || getTextPrice().getText().matches("\\d+")) {
-                    getCar().setPrice(getCar().validDouble(getTextPrice().getText()));
+                    stationGAS.setPrice(check.validDoubleInString(getTextPrice().getText()));
                     getErrorPrice().setText("");
                 } else {
                     getErrorPrice().setForeground(Color.RED);
@@ -261,10 +274,10 @@ public class InCityPanel extends JFrame {
         getConditionerON().setSelected(true);
 
         //if the conditionerON button is enabled, then we assign the conditioner variable of the car class (true)
-        getConditionerON().addActionListener(e -> getCar().setConditioner(true));
+        getConditionerON().addActionListener(e -> car.setConditioner(true));
 
         //if the conditionerOFF button is enabled, then we assign the conditioner variable of the car class (false)
-        getConditionerOFF().addActionListener(e -> getCar().setConditioner(false));
+        getConditionerOFF().addActionListener(e -> car.setConditioner(false));
 
         //combine the dynamicDrivingON and dynamicDrivingOFF buttons into a group, set the initial value to ON
         ButtonGroup groupDynamicDriving = new ButtonGroup();
@@ -273,10 +286,10 @@ public class InCityPanel extends JFrame {
         getDynamicDrivingON().setSelected(true);
 
         //if the dynamicDrivingON button is enabled, then assign the variable dynamicDriving of the car class (true)
-        getDynamicDrivingON().addActionListener(e -> getCar().setDynamicDriving(true));
+        getDynamicDrivingON().addActionListener(e -> car.setDynamicDriving(true));
 
         //if the dynamicDrivingOFF button is enabled, then assign the variable dynamicDriving of the car class (false)
-        getDynamicDrivingOFF().addActionListener(e -> getCar().setDynamicDriving(false));
+        getDynamicDrivingOFF().addActionListener(e -> car.setDynamicDriving(false));
 
         //when you click on the start button, it checks whether all the fields are filled,
         // if not, then asks to fill in the fields, and if all the fields are filled in correctly,
@@ -290,7 +303,7 @@ public class InCityPanel extends JFrame {
                 getErrorButton().setText("Заполните все поля");
             } else {
                 getErrorButton().setText("");
-                getCar().priceInCityGAS(getCar().getDistance(), getCar().getTraffic(), car.getMidGasoline(),
+                onBoardComputerCar.priceInCityGAS(getCar().getDistance(), getCar().getTraffic(), car.getMidGasoline(),
                         getCar().getPrice(), getCar().isConditioner(), getCar().isDynamicDriving());
                 JOptionPane.showMessageDialog(null, getCar().reportCity());
                 getCar().resetGasAndResultGas();
@@ -376,10 +389,6 @@ public class InCityPanel extends JFrame {
         return returnMenu;
     }
 
-    protected Car getCar() {
-        return car;
-    }
-
     protected JTextField getTextMidGasoline() {
         return textMidGasoline;
     }
@@ -398,5 +407,13 @@ public class InCityPanel extends JFrame {
 
     protected JRadioButton getBeTraffic() {
         return beTraffic;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }// end class InCityPanel
