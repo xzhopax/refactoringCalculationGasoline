@@ -52,6 +52,12 @@ public class CheckingEnteredData implements Check {
     }// end isDateValid
 
 
+    public static int fixErrorTraffic(int traffic){
+        if (traffic == 0) return 1;
+        return traffic;
+    }
+
+
 
 
 

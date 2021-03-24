@@ -1,13 +1,15 @@
 package calculationGasoline;
 
 import calculationGasoline.cars.ActionCar;
+import calculationGasoline.cars.Car;
 import calculationGasoline.cars.VolkswagenPolo;
 
 public class RunRoad {
     public static void main(String[] args) {
-        ActionCar car = new VolkswagenPolo();
+        Car car = new VolkswagenPolo();
 
-        System.out.println(((VolkswagenPolo) car).getDistance());
+
+        System.out.println( car.gasolineConsumptionWithCarSpeed(201));
     }
 
 }

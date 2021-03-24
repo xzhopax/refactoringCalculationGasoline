@@ -6,7 +6,7 @@ import calculationGasoline.stationGas.StationGAS;
 public class OnBoardComputerCar {
     private String date;
     private double distance = 0, resultGas = 0, midGasoline = 0;
-    private int traffic = 0;
+
 
     private Car car;
     private StationGAS stationGAS;
@@ -40,12 +40,7 @@ public class OnBoardComputerCar {
     public void setMidGasoline(double midGasoline) {
         this.midGasoline = midGasoline;
     }
-    public int getTraffic() {
-        return traffic;
-    }
-    public void setTraffic(int traffic) {
-        this.traffic = traffic;
-    }
+
     public Car getCar() {
         return car;
     }
@@ -56,15 +51,9 @@ public class OnBoardComputerCar {
 
     protected void priceOnHighwayGAS () {
         //double speed, double distance, double price, boolean conditioner, boolean dynamicDriving
-
-        if (getCar().isConditioner()) {
-            getCar().setGas(getCar().getGas() + getCar().ReturnGasolineConsumptionWithCarSpeed(getCar().getSpeed()) + 0.5);
-        } else getCar().setGas(getCar().getGas() + getCar().ReturnGasolineConsumptionWithCarSpeed(getCar().getSpeed()));
-
-        if (getCar().isDynamicDriving()) {
-            getCar().setGas(getCar().getGas() + 2.0);
-        }
-        getCar().setGas((getCar().getGas() / 100) * getDistance());
+        getCar().drivingWithConditioningOnHighway();
+        getCar().drivingWithDynamicStyle();
+        getCar().setGasolineCosts((getCar().getGasolineCosts() / 100) * getDistance());
         setResultGas(getCar().getGas() * getStationGAS().getPriceGasoline());
     }// end priceOnHighwayGAS
 

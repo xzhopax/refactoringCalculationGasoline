@@ -1,24 +1,14 @@
 package calculationGasoline.cars;
 
-public abstract class Car extends Vehicle implements ActionCar {
-    private final double[] ARRAY_FUEL_CONSUMPTION_FROM_ROAD_LOAD_1_10
-            = new double[]{7.0, 8.0, 9.0, 10.0, 12.0, 14.0, 15.0, 16.0, 18.0, 20.0};
-    private final double[] ARRAY_FUEL_CONSUMPTION_CAR_SPEED
-            = new double[]{9.5, 6.0, 4.8, 4.0, 3.5, 4.0, 5.0, 6.0, 8.0, 10.5};
+public abstract class Car extends Vehicle implements ActionCar, MovementOnRoad {
 
     private final StringBuilder sb = new StringBuilder();
-    private String date = "";
-    private double price = 0, distance = 5, speed = 0, gas = 0, resultGas = 0, midGasoline = 0;
-    private int traffic = 0;
+
+    private double distance = 5, speed = 0, gasolineCosts = 0, resultGas = 0;
     private boolean conditioner = true, dynamicDriving = true;
 
     //Getter and Setter
-    protected double[] getARRAY_FUEL_CONSUMPTION_FROM_ROAD_LOAD_1_10 () {
-        return ARRAY_FUEL_CONSUMPTION_FROM_ROAD_LOAD_1_10 ;
-    }
-    protected double[] getARRAY_FUEL_CONSUMPTION_CAR_SPEED() {
-        return ARRAY_FUEL_CONSUMPTION_CAR_SPEED;
-    }
+
     private StringBuilder getSb() {
         return sb;
     }
@@ -35,12 +25,6 @@ public abstract class Car extends Vehicle implements ActionCar {
     public void setSpeed(double speed) {
         this.speed = speed;
     }
-    public double getGas() {
-        return gas;
-    }
-    public void setGas(double gas) {
-        this.gas = gas;
-    }
     public boolean isConditioner() {
         return conditioner;
     }
@@ -53,6 +37,12 @@ public abstract class Car extends Vehicle implements ActionCar {
     public void setDynamicDriving(boolean dynamicDriving) {
         this.dynamicDriving = dynamicDriving;
     }
+    public double getGasolineCosts() {
+        return gasolineCosts;
+    }
+    public void setGasolineCosts(double gasolineCosts) {
+        this.gasolineCosts = gasolineCosts;
+    }
 
     @Override
     public void onOffDynamicDriving(boolean dynamicDriving) {
@@ -64,10 +54,28 @@ public abstract class Car extends Vehicle implements ActionCar {
     }
 
     @Override
-    public double ReturnGasolineConsumptionWithCarSpeed(double speed) {
+    public double returnGasolineConsumptionWithCarSpeed(double speed) {
+
+        return 0;
+    }
+    @Override
+    public double gasolineConsumptionWithCarSpeed(double speed){
 
         return 0;
     }
 
+    @Override
+    public void drivingWithConditioningInCity(boolean conditioner, int traffic) {
 
+    }
+
+    @Override
+    public void drivingWithConditioningOnHighway(boolean conditioner, double speed) {
+
+    }
+
+    @Override
+    public void drivingWithDynamicStyle(boolean dynamicDriving) {
+
+    }
 }
