@@ -1,24 +1,14 @@
 package calculationGasoline.cars;
 
-public abstract class Car extends Vehicle implements ActionCar, MovementOnRoad {
+public abstract class Car implements ActionCar, MovementOnRoad {
 
     private final StringBuilder sb = new StringBuilder();
 
-    private double distance = 5, speed = 0, gasolineCosts = 0, resultGas = 0;
+    private double  speed = 0, gasolineCosts  = 0;
     private boolean conditioner = true, dynamicDriving = true;
 
+
     //Getter and Setter
-
-    private StringBuilder getSb() {
-        return sb;
-    }
-
-    public double getDistance() {
-        return distance;
-    }
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
     public double getSpeed() {
         return speed;
     }
@@ -53,11 +43,6 @@ public abstract class Car extends Vehicle implements ActionCar, MovementOnRoad {
 
     }
 
-    @Override
-    public double returnGasolineConsumptionWithCarSpeed(double speed) {
-
-        return 0;
-    }
     @Override
     public double gasolineConsumptionWithCarSpeed(double speed){
 

@@ -9,7 +9,9 @@ public interface ActionCar {
 
     }
 
-    double returnGasolineConsumptionWithCarSpeed(double speed);
+    default double returnGasolineConsumptionWithCarSpeed(double speed) {
+        return 0;
+    }
 
     double gasolineConsumptionWithCarSpeed(double speed);
 }

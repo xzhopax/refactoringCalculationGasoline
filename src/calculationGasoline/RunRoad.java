@@ -1,15 +1,13 @@
 package calculationGasoline;
 
-import calculationGasoline.cars.ActionCar;
-import calculationGasoline.cars.Car;
-import calculationGasoline.cars.VolkswagenPolo;
+import javax.swing.*;
 
 public class RunRoad {
     public static void main(String[] args) {
-        Car car = new VolkswagenPolo();
-
-
-        System.out.println( car.gasolineConsumptionWithCarSpeed(201));
+        SwingUtilities.invokeLater(() -> {
+            MenuGUI gui = new MenuGUI();// creat panel MenuGUI
+            gui.setVisible(true); // show panel
+        });
     }
 
 }

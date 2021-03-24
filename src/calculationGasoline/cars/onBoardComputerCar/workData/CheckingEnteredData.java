@@ -1,17 +1,17 @@
-package calculationGasoline.workData;
+package calculationGasoline.cars.onBoardComputerCar.workData;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class CheckingEnteredData implements Check {
+public class CheckingEnteredData {
 
     /**
      * validDouble - checking a string for a number double
      * @param StringNumPrice - accepts a string as input to check it for double
      * @return - if the input parameter is correct, then it returns the number of doubles
      */
-    public double validDoubleInString(String StringNumPrice) {
+    public static double validDoubleInString(String StringNumPrice) {
         double result = 0;
         if (StringNumPrice.matches("(\\d+(\\.\\d+))") && Double.parseDouble(StringNumPrice) > 0
                 || StringNumPrice.matches("\\d+") && Integer.parseInt(StringNumPrice) > 0) {
@@ -26,7 +26,7 @@ public class CheckingEnteredData implements Check {
      * @param StringNumPrice - accepts a string as an input to check it for an integer
      * @return - if the input parameter is correct, then it returns an integer
      */
-     public int validIntegerInString(String StringNumPrice) {
+     public static int validIntegerInString(String StringNumPrice) {
         int result = 0;
         if (StringNumPrice.matches("\\d+") && Integer.parseInt(StringNumPrice) > 0) {
             result = Integer.parseInt(StringNumPrice);
@@ -40,7 +40,7 @@ public class CheckingEnteredData implements Check {
      * @param date - accepts a string as input to check it for a date
      * @return - if the input parameter is correct, then it returns true otherwise return false
      */
-    public boolean isDateValidInString(String date) {
+    public static boolean isDateValidInString(String date) {
         try {
             DateFormat df = new SimpleDateFormat("d.M.yyyy");
             df.setLenient(false);
