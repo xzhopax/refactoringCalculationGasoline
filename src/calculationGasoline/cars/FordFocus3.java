@@ -5,66 +5,75 @@ import calculationGasoline.cars.enumsForCar.NameCar;
 import calculationGasoline.cars.enumsForCar.RoadLoad;
 import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
 
-import java.util.Map;
+public class FordFocus3 extends Car {
 
-public abstract class Car {
-    private final String name = NameCar.CAR.getName();
+    private final String name = NameCar.FORD_FOCUS_3.getName();
     private double  speed = 0, gasolineCosts  = 0;
     private boolean conditioner = true, dynamicDriving = true;
 
-
     //Getter and Setter
+    @Override
     public double getSpeed() {
         return speed;
     }
+    @Override
     public void setSpeed(double speed) {
         this.speed = speed;
     }
-    public boolean isConditioner() {
-        return conditioner;
-    }
-    public void setConditioner(boolean conditioner) {
-        this.conditioner = conditioner;
-    }
-    public boolean isDynamicDriving() {
-        return dynamicDriving;
-    }
-    public void setDynamicDriving(boolean dynamicDriving) {
-        this.dynamicDriving = dynamicDriving;
-    }
+    @Override
     public double getGasolineCosts() {
         return gasolineCosts;
     }
+    @Override
     public void setGasolineCosts(double gasolineCosts) {
         this.gasolineCosts = gasolineCosts;
     }
+    @Override
+    public boolean isConditioner() {
+        return conditioner;
+    }
+    @Override
+    public void setConditioner(boolean conditioner) {
+        this.conditioner = conditioner;
+    }
+    @Override
+    public boolean isDynamicDriving() {
+        return dynamicDriving;
+    }
+    @Override
+    public void setDynamicDriving(boolean dynamicDriving) {
+        this.dynamicDriving = dynamicDriving;
+    }
+    @Override
     public String getName() {
         return name;
     }
     //End Getter and Setter
 
-
-
+    @Override
     public void drivingWithConditioningInCity(boolean conditioner, int traffic) {
         int thisTraffic = CheckingEnteredData.fixErrorTraffic(traffic);
 
         if (conditioner)
             setGasolineCosts(getGasolineCosts()
-                    + RoadLoad.CAR.getFuelConsumptionFromRoadLoad()[thisTraffic - 1] + 0.6);
+                    + RoadLoad.FORD_FOCUS_3.getFuelConsumptionFromRoadLoad()[thisTraffic - 1] + 0.5);
         else setGasolineCosts(getGasolineCosts()
-                + RoadLoad.CAR.getFuelConsumptionFromRoadLoad()[thisTraffic - 1]);
+                + RoadLoad.FORD_FOCUS_3.getFuelConsumptionFromRoadLoad()[thisTraffic - 1]);
     }
 
+    @Override
     public void drivingWithConditioningOnHighway(boolean conditioner, double speed) {
         setSpeed(speed);
         if (conditioner)
             setGasolineCosts(getGasolineCosts()
-                    + CarSpeedAndPetrol.CAR.returnGasolineConsumptionWithCarSpeed(speed) + 0.6);
+                    + CarSpeedAndPetrol.FORD_FOCUS_3.returnGasolineConsumptionWithCarSpeed(speed) + 0.5);
         else setGasolineCosts(getGasolineCosts()
-                + CarSpeedAndPetrol.CAR.returnGasolineConsumptionWithCarSpeed(speed));
+                + CarSpeedAndPetrol.FORD_FOCUS_3.returnGasolineConsumptionWithCarSpeed(speed));
     }
 
-    public void drivingWithDynamicStyle(boolean dynamicDriving) {
-        if (dynamicDriving) setGasolineCosts(getGasolineCosts() + 2.5);
+    @Override
+    public void drivingWithDynamicStyle(boolean dynamicDriving){
+        if (dynamicDriving) setGasolineCosts(getGasolineCosts() + 2.0);
     }
+
 }

@@ -1,8 +1,9 @@
 package calculationGasoline;
 
 import calculationGasoline.cars.Car;
-import calculationGasoline.onBoardComputerCar.OnBoardComputerCar;
+import calculationGasoline.cars.CreateCar;
 import calculationGasoline.cars.VolkswagenPolo;
+import calculationGasoline.onBoardComputerCar.OnBoardComputerCar;
 import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
 
 import javax.swing.*;
@@ -51,11 +52,12 @@ public class InCityPanel extends JFrame {
     private JLabel errorMidGasoline;
     private JRadioButton beMidGasoline;
     private JRadioButton beTraffic;
+    private JLabel nameCar;
+    private JComboBox choosingCar;
+    private JLabel errorChoosingCar;
 
-    private final Car car = new VolkswagenPolo();
-    private final OnBoardComputerCar computerCar = new OnBoardComputerCar(car);
-
-
+    private Car car = CreateCar.getMapCars().get(1);
+    private OnBoardComputerCar computerCar = new OnBoardComputerCar(getCar());
 
     /**
      * 1.The constructor creates a panel with the specified parameters;
@@ -81,7 +83,7 @@ public class InCityPanel extends JFrame {
      */
 
     protected InCityPanel() {
-        this.setBounds(400, 200, 600, 400);// initial window size
+        this.setBounds(400, 200, 600, 500);// initial window size
         this.setResizable(true); // you can make the window wider
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setTitle("расчет затрат бензина в городе");//window title
@@ -178,7 +180,7 @@ public class InCityPanel extends JFrame {
                         // if the string number an integer, then we write it to the variable traffic
                         if (getTextTraffic().getText().matches("\\d+")
                                 && Integer.parseInt(getTextTraffic().getText()) < 11
-                                    && Integer.parseInt(getTextTraffic().getText()) >= 0) {
+                                && Integer.parseInt(getTextTraffic().getText()) >= 0) {
 
                             getComputerCar().setTraffic(CheckingEnteredData.validIntegerInString(getTextTraffic().getText()));
                             getErrorTraffic().setText("");
@@ -287,7 +289,7 @@ public class InCityPanel extends JFrame {
             // write the entered arguments into the method and get the result:
             if (getTextDate().getText().equals("") || getTextDistance().getText().equals("") ||
                     getTextTraffic().getText().equals("") || getTextPrice().getText().equals("")
-                    || getTextMidGasoline().getText().equals("")) {
+                    || getTextMidGasoline().getText().equals("") || getChoosingCar().getSelectedIndex() == 0 ) {
                 getErrorButton().setForeground(Color.RED);
                 getErrorButton().setText("Заполните все поля");
             } else {
@@ -312,6 +314,35 @@ public class InCityPanel extends JFrame {
                 dispose();
             }
         });// end button returnMenu
+
+        choosingCar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (getChoosingCar().getSelectedIndex()==0) {
+                    getErrorChoosingCar().setForeground(Color.RED);
+                    getErrorChoosingCar().setText("Выберите машину");
+                    getChoosingCar().setSelectedIndex(0);
+                    setCar(CreateCar.getMapCars().get(1));
+                    setComputerCar(new OnBoardComputerCar(getCar()));
+                } else {
+                    getErrorChoosingCar().setText("");
+                    setCar(CreateCar.getMapCars().get(getChoosingCar().getSelectedIndex()));
+                    setComputerCar(new OnBoardComputerCar(getCar()));
+                    getTextDate().setText("");
+                    getTextDistance().setText("");
+                    getTextTraffic().setText("0");
+                    getTextTraffic().setEnabled(false);
+                    getTextPrice().setText("");
+                    getTextMidGasoline().setText("0");
+                    getTextMidGasoline().setEnabled(false);
+                    getConditionerOFF().setSelected(true);
+                    getCar().setConditioner(false);
+                    getDynamicDrivingOFF().setSelected(true);
+                    getCar().setDynamicDriving(false);
+
+                }
+            }
+        });
     }// end constructor InCityPanel
 
     // down getter and setter
@@ -400,15 +431,27 @@ public class InCityPanel extends JFrame {
         return beTraffic;
     }
 
-    public Car getCar() {
+    protected JComboBox getChoosingCar() {
+        return choosingCar;
+    }
+
+    protected JLabel getErrorChoosingCar() {
+        return errorChoosingCar;
+    }
+
+    protected Car getCar() {
         return car;
     }
 
-    public OnBoardComputerCar getComputerCar() {
+    protected OnBoardComputerCar getComputerCar() {
         return computerCar;
     }
 
+    private void setCar(Car car) {
+        this.car = car;
+    }
 
-
-
+    private void setComputerCar(OnBoardComputerCar computerCar) {
+        this.computerCar = computerCar;
+    }
 }// end class InCityPanel

@@ -11,7 +11,7 @@ public class OnBoardComputerCar {
     public int traffic = 0;
     private StringBuilder sb = new StringBuilder();
 
-    private final Car car;
+    private Car car;
     public OnBoardComputerCar(Car car){
         this.car = car;
     }

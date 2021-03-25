@@ -1,7 +1,9 @@
 package calculationGasoline.cars.enumsForCar;
 
 public enum NameCar {
-    Car("Car"),VOLKSWAGENPOLO("Volkswagen POLO");
+    CAR("Car"),
+    VOLKSWAGEN_POLO("Volkswagen POLO"),
+    FORD_FOCUS_3("Ford Focus 3");
 
     private final String name;
 
@@ -12,4 +14,6 @@ public enum NameCar {
     public String getName() {
         return name;
     }
+
+
 }

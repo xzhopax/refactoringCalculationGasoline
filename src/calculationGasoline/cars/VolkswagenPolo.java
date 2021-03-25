@@ -8,7 +8,7 @@ import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
 
 public class VolkswagenPolo extends Car {
 
-    private final String name = NameCar.VOLKSWAGENPOLO.getName();
+    private final String name = NameCar.VOLKSWAGEN_POLO.getName();
     private double  speed = 0, gasolineCosts  = 0;
     private boolean conditioner = true, dynamicDriving = true;
 
