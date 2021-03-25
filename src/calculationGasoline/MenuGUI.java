@@ -3,7 +3,7 @@ package calculationGasoline;
 import calculationGasoline.cars.Car;
 import calculationGasoline.cars.VolkswagenPolo;
 import calculationGasoline.onBoardComputerCar.OnBoardComputerCar;
-import calculationGasoline.onBoardComputerCar.workData.DataCounting;
+import calculationGasoline.onBoardComputerCar.workData.WorkData;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -92,8 +92,8 @@ public class MenuGUI extends JFrame {
         getShowHistory().addActionListener(e -> {
             JFrame frame = new JFrame();
             JTextArea textArea = new JTextArea(15, 35);
-            textArea.setText(getComputerCar().outDisplayReport()
-                    + "\n" + DataCounting.reportTheTotal());
+            textArea.setText(WorkData.outDisplayReport()
+                    + "\n" + WorkData.reportTheTotal());
             textArea.setEditable(false);
             JScrollPane sp = new JScrollPane(textArea);
             JOptionPane.showMessageDialog(frame, sp);
@@ -107,7 +107,7 @@ public class MenuGUI extends JFrame {
                     (null, "Вы точно хотите очистить историю?",
                             "очистка истории", JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
-                DataCounting.cleanResult();
+                WorkData.cleanResult();
             }
         });// end deleteHistory
 

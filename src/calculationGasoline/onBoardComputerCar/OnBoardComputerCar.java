@@ -2,10 +2,7 @@ package calculationGasoline.onBoardComputerCar;
 
 import calculationGasoline.cars.Car;
 import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
-import calculationGasoline.onBoardComputerCar.workData.DataCounting;
-import calculationGasoline.MenuGUI;
-
-import java.io.*;
+import calculationGasoline.onBoardComputerCar.workData.WorkData;
 
 
 public class OnBoardComputerCar {
@@ -106,11 +103,12 @@ public class OnBoardComputerCar {
         sb.setLength(0);
         sb.append("\n=============================================\n");
         sb.append(getDate()).append("\n");
+        sb.append("Машина : ").append(getCar().getName()).append("\n");
         sb.append("За пройденный путь в населенном пункте вы потратили:\n");
         sb.append(String.format("Бензин : %.2f литров\n", getCar().getGasolineCosts()));
         sb.append(String.format("Денег: %.2f рублей\n", getResultGas()));
         sb.append("=============================================\n");
-        saveReport(sb.toString());
+        WorkData.saveReport(sb.toString());
         return sb.toString();
     } // end reportCity
 
@@ -122,49 +120,15 @@ public class OnBoardComputerCar {
         sb.setLength(0);
         sb.append("\n=============================================\n");
         sb.append(getDate()).append("\n");
+        sb.append("Машина : ").append(getCar().getName()).append("\n");
         sb.append("За пройденный путь по трассе вы потратили:\n");
         sb.append(String.format("Бензин : %.2f литров\n", getCar().getGasolineCosts()));
         sb.append(String.format("Денег: %.2f рублей\n", getResultGas()));
         sb.append("=============================================\n");
-        saveReport(sb.toString());
+        WorkData.saveReport(sb.toString());
         return sb.toString();
     } //end reportHighway
 
-    /**
-     * saveReport(String line) - save the report to a file
-     * @param line - takes a string as input to be written to a file
-     */
-    protected void saveReport(String line) {
-        try (Writer reportFile = new FileWriter
-                ("reportFile.txt", true)) {
-            reportFile.write(line);
-        } catch (IOException e) {
-            MenuGUI.error();
-            e.printStackTrace();
-        }
-    }// end save report
-
-    /**
-     * outDisplayReport() - reading history from a file to display it on the screen
-     * @return - returns a string with information read from a file
-     */
-    public String outDisplayReport() {
-        StringBuilder sb = new StringBuilder();
-        try (Reader reader = new FileReader
-                ("reportFile.txt")) {
-            int data = reader.read();
-            while (data != -1) {
-                sb.append((char) data);
-                data = reader.read();
-            }
-            DataCounting.setAllGas(DataCounting.findInFileGas(sb.toString()));
-            DataCounting.setAllMoney(DataCounting.findInFileMoney(sb.toString()));
-        } catch (IOException e) {
-            MenuGUI.error();
-            e.printStackTrace();
-        }
-        return sb.toString();
-    }//end outDisplayReport
 
 
 

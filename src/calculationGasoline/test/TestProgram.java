@@ -1,24 +1,28 @@
 package calculationGasoline.test;
 
-import calculationGasoline.cars.Car;
-import calculationGasoline.cars.VolkswagenPolo;
-import calculationGasoline.onBoardComputerCar.workData.DataCounting;
+import calculationGasoline.cars.enumsForCar.CarSpeedAndPetrol;
+import calculationGasoline.onBoardComputerCar.workData.WorkData;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class TestProgram {
 
     @Test
-   public void testGasolineConsumptionWithCarSpeed(){
-        Car car = new VolkswagenPolo();
+   public void returnGasolineConsumptionWithCarSpeed(){
 
-       Assert.assertEquals(10.5,car.gasolineConsumptionWithCarSpeed(200),0.1);
-       Assert.assertEquals(8.0,car.gasolineConsumptionWithCarSpeed(150),0.1);
-       Assert.assertEquals(0,car.gasolineConsumptionWithCarSpeed(210),0.1);
-       Assert.assertEquals(0,car.gasolineConsumptionWithCarSpeed(0),0.1);
-       Assert.assertEquals(6,car.gasolineConsumptionWithCarSpeed(11),0.1);
-       Assert.assertEquals(4.8,car.gasolineConsumptionWithCarSpeed(21),0.1);
-       Assert.assertEquals(0,car.gasolineConsumptionWithCarSpeed(-10),0.1);
+       Assert.assertEquals(
+               10.5, CarSpeedAndPetrol.VOLKSWAGEN_POLO.returnGasolineConsumptionWithCarSpeed(200),0.1);
+       Assert.assertEquals(
+               8.0,CarSpeedAndPetrol.VOLKSWAGEN_POLO.returnGasolineConsumptionWithCarSpeed(150),0.1);
+       Assert.assertEquals(
+               0,CarSpeedAndPetrol.VOLKSWAGEN_POLO.returnGasolineConsumptionWithCarSpeed(210),0.1);
+       Assert.assertEquals(
+               0,CarSpeedAndPetrol.VOLKSWAGEN_POLO.returnGasolineConsumptionWithCarSpeed(0),0.1);
+       Assert.assertEquals(
+               6,CarSpeedAndPetrol.VOLKSWAGEN_POLO.returnGasolineConsumptionWithCarSpeed(11),0.1);
+       Assert.assertEquals(
+               4.8,CarSpeedAndPetrol.VOLKSWAGEN_POLO.returnGasolineConsumptionWithCarSpeed(21),0.1);
+//       Assert.assertEquals(0,car.gasolineConsumptionWithCarSpeed(-10),0.1);
     }
 
     @Test
@@ -35,7 +39,7 @@ public class TestProgram {
                 "Бензин : 7,20 литров\n" +
                 "Денег: 352,80 рублей\n" +
                 "=============================================";
-        double result = DataCounting.findInFileGas(str);
+        double result = WorkData.findInFileGas(str);
 
         Assert.assertEquals(17.40, result, 0.01);
     }

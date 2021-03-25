@@ -2,13 +2,11 @@ package calculationGasoline.onBoardComputerCar.workData;
 
 import calculationGasoline.MenuGUI;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DataCounting {
+public class WorkData {
     private static double allGas;
     private static double allMoney;
 
@@ -16,14 +14,22 @@ public class DataCounting {
         return allGas;
     }
     public static void setAllGas(double allGas) {
-        DataCounting.allGas = allGas;
+        WorkData.allGas = allGas;
     }
     public static double getAllMoney() {
         return allMoney;
     }
     public static void setAllMoney(double allMoney) {
-        DataCounting.allMoney = allMoney;
+        WorkData.allMoney = allMoney;
     }
+
+    /**
+     * resetAllMoneyAndAllGas() - For setAllGas and setAllMoney sets values to 0
+     */
+    private static void resetAllMoneyAndAllGas() {
+        setAllGas(0);
+        setAllMoney(0);
+    }// end resetAllMoneyAndAllGas
 
     /**
      * countNumber - accepts two double numbers as input to add one to the other
@@ -79,8 +85,7 @@ public class DataCounting {
      * fields to display the report history on the screen
      */
     public static void cleanResult() {// start clean
-        setAllMoney(0);
-        setAllGas(0);
+        resetAllMoneyAndAllGas();
         try (Writer reportFile = new FileWriter
                 ("reportFile.txt", false)) {
             reportFile.write("");
@@ -97,11 +102,47 @@ public class DataCounting {
     public static String reportTheTotal() {
         String report = String.format("Общая сумма денег была потрачена на бензин : %.2f\n", getAllMoney()) +
                 String.format("Общее количество бензина израсходаванно : %.2f", getAllGas());
-        setAllMoney(0);
-        setAllGas(0);
+        resetAllMoneyAndAllGas();
         return report;
 
     }//end reportTheTotal
+
+    /**
+     * saveReport(String line) - save the report to a file
+     * @param line - takes a string as input to be written to a file
+     */
+    public static void saveReport(String line) {
+        try (Writer reportFile = new FileWriter
+                ("reportFile.txt", true)) {
+            reportFile.write(line);
+        } catch (IOException e) {
+            MenuGUI.error();
+            e.printStackTrace();
+        }
+    }// end save report
+
+    /**
+     * outDisplayReport() - reading history from a file to display it on the screen
+     * @return - returns a string with information read from a file
+     */
+    public static String outDisplayReport() {
+        StringBuilder sb = new StringBuilder();
+        try (Reader reader = new FileReader
+                ("reportFile.txt")) {
+            int data = reader.read();
+            while (data != -1) {
+                sb.append((char) data);
+                data = reader.read();
+            }
+            WorkData.setAllGas(WorkData.findInFileGas(sb.toString()));
+            WorkData.setAllMoney(WorkData.findInFileMoney(sb.toString()));
+        } catch (IOException e) {
+            MenuGUI.error();
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }//end outDisplayReport
+
 
 
 

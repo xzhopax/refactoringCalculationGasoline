@@ -1,16 +1,14 @@
 package calculationGasoline.cars;
 
 import calculationGasoline.cars.enumsForCar.CarSpeedAndPetrol;
+import calculationGasoline.cars.enumsForCar.NameCar;
 import calculationGasoline.cars.enumsForCar.RoadLoad;
 import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
 
 public abstract class Car {
-
-    private final StringBuilder sb = new StringBuilder();
-
+    private final String name = NameCar.Car.getName();
     private double  speed = 0, gasolineCosts  = 0;
     private boolean conditioner = true, dynamicDriving = true;
-
 
     //Getter and Setter
     public double getSpeed() {
@@ -36,6 +34,9 @@ public abstract class Car {
     }
     public void setGasolineCosts(double gasolineCosts) {
         this.gasolineCosts = gasolineCosts;
+    }
+    public String getName() {
+        return name;
     }
     //End Getter and Setter
 
