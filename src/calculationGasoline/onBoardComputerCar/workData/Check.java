@@ -1,4 +1,4 @@
-package calculationGasoline.cars.onBoardComputerCar.workData;
+package calculationGasoline.onBoardComputerCar.workData;
 
 public interface Check {
     static double validDoubleInString(String StringNumPrice) {
@@ -16,4 +16,5 @@ public interface Check {
     static int fixErrorTraffic(int traffic) {
      return 0;
     }
+
 }

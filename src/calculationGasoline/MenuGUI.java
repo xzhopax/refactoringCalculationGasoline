@@ -2,8 +2,8 @@ package calculationGasoline;
 
 import calculationGasoline.cars.Car;
 import calculationGasoline.cars.VolkswagenPolo;
-import calculationGasoline.cars.onBoardComputerCar.OnBoardComputerCar;
-import calculationGasoline.cars.onBoardComputerCar.workData.DataCounting;
+import calculationGasoline.onBoardComputerCar.OnBoardComputerCar;
+import calculationGasoline.onBoardComputerCar.workData.DataCounting;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -15,8 +15,8 @@ import java.awt.event.*;
  */
 
 public class MenuGUI extends JFrame {
-    VolkswagenPolo car = new VolkswagenPolo();
-    OnBoardComputerCar computerCar = new OnBoardComputerCar(car);
+    private final Car car = new VolkswagenPolo();
+    private final OnBoardComputerCar computerCar = new OnBoardComputerCar(car);
 
     private JButton inCity;
     private JButton onHighway;
@@ -91,10 +91,9 @@ public class MenuGUI extends JFrame {
         // the trip history is displayed on the screen written to a file through the panel with a slider
         getShowHistory().addActionListener(e -> {
             JFrame frame = new JFrame();
-            StringBuilder sb = new StringBuilder();
-            sb.append(computerCar.outDisplayReport()).append("\n").append(DataCounting.reportTheTotal());
             JTextArea textArea = new JTextArea(15, 35);
-            textArea.setText(sb.toString());
+            textArea.setText(getComputerCar().outDisplayReport()
+                    + "\n" + DataCounting.reportTheTotal());
             textArea.setEditable(false);
             JScrollPane sp = new JScrollPane(textArea);
             JOptionPane.showMessageDialog(frame, sp);
@@ -152,4 +151,7 @@ public class MenuGUI extends JFrame {
         return panel;
     }
 
+    protected OnBoardComputerCar getComputerCar() {
+        return computerCar;
+    }
 }// end class MenuGUI

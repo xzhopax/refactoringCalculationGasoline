@@ -1,9 +1,9 @@
 package calculationGasoline;
 
 import calculationGasoline.cars.Car;
-import calculationGasoline.cars.onBoardComputerCar.OnBoardComputerCar;
+import calculationGasoline.onBoardComputerCar.OnBoardComputerCar;
 import calculationGasoline.cars.VolkswagenPolo;
-import calculationGasoline.cars.onBoardComputerCar.workData.CheckingEnteredData;
+import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -239,6 +239,7 @@ public class OnHighwayPanel extends JFrame {
             } else {
                 getErrorButton().setText("");
                 getCar().drivingWithConditioningOnHighway(getCar().isConditioner(),getCar().getSpeed());
+                getCar().drivingWithDynamicStyle(getCar().isDynamicDriving());
                 getComputerCar().priceOnGasolineCosts(getComputerCar().getDistance(), getComputerCar().getPrice());
                 JOptionPane.showMessageDialog(null, getComputerCar().reportHighway());
                 getComputerCar().resetGasAndResultGas();   // reset in car gas = 0 and resultGas = 0

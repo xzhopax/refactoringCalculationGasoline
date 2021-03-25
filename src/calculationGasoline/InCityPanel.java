@@ -1,9 +1,9 @@
 package calculationGasoline;
 
 import calculationGasoline.cars.Car;
-import calculationGasoline.cars.onBoardComputerCar.OnBoardComputerCar;
+import calculationGasoline.onBoardComputerCar.OnBoardComputerCar;
 import calculationGasoline.cars.VolkswagenPolo;
-import calculationGasoline.cars.onBoardComputerCar.workData.CheckingEnteredData;
+import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -160,7 +160,7 @@ public class InCityPanel extends JFrame {
 
                 getTextTraffic().setEnabled(true);
                 getTextMidGasoline().setEnabled(false);
-                computerCar.setMidGasoline(0);
+                getComputerCar().setMidGasoline(0);
                 getTextMidGasoline().setText("0");
                 getBeTraffic().setSelected(true);
 
@@ -180,7 +180,7 @@ public class InCityPanel extends JFrame {
                                 && Integer.parseInt(getTextTraffic().getText()) < 11
                                     && Integer.parseInt(getTextTraffic().getText()) >= 0) {
 
-                            computerCar.setTraffic(CheckingEnteredData.validIntegerInString(getTextTraffic().getText()));
+                            getComputerCar().setTraffic(CheckingEnteredData.validIntegerInString(getTextTraffic().getText()));
                             getErrorTraffic().setText("");
                             getErrorMidGasoline().setText("");
 
@@ -201,7 +201,7 @@ public class InCityPanel extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 getTextMidGasoline().setEnabled(true);
                 getTextTraffic().setEnabled(false);
-                computerCar.setTraffic(0);
+                getComputerCar().setTraffic(0);
                 getTextTraffic().setText("0");
                 getBeMidGasoline().setSelected(true);
 
@@ -218,8 +218,7 @@ public class InCityPanel extends JFrame {
                         // if the string number is double or an integer, then we write it to the variable distance
                         if (getTextMidGasoline().getText().matches("(\\d+(\\.?\\d+))")
                                 || getTextMidGasoline().getText().matches("\\d+")) {
-
-                            computerCar.setMidGasoline(
+                            getComputerCar().setMidGasoline(
                                     CheckingEnteredData.validDoubleInString(getTextMidGasoline().getText()));
                             getErrorMidGasoline().setText("");
                             getErrorTraffic().setText("");
@@ -247,7 +246,7 @@ public class InCityPanel extends JFrame {
                 // if the string number is double or an integer, then we write it to the variable price
                 if (getTextPrice().getText().matches("(\\d+(\\.?\\d+))")
                         || getTextPrice().getText().matches("\\d+")) {
-                    computerCar.setPrice(CheckingEnteredData.validDoubleInString(getTextPrice().getText()));
+                    getComputerCar().setPrice(CheckingEnteredData.validDoubleInString(getTextPrice().getText()));
                     getErrorPrice().setText("");
                 } else {
                     getErrorPrice().setForeground(Color.RED);
@@ -297,8 +296,8 @@ public class InCityPanel extends JFrame {
                 getCar().drivingWithDynamicStyle(getCar().isDynamicDriving());
                 getComputerCar().priceOnGasolineCosts(getComputerCar().getDistance(),getComputerCar().getPrice());
 
-                JOptionPane.showMessageDialog(null, computerCar.reportCity());
-                computerCar.resetGasAndResultGas();
+                JOptionPane.showMessageDialog(null, getComputerCar().reportCity());
+                getComputerCar().resetGasAndResultGas();
             }
         });// end button start
 

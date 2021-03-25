@@ -1,4 +1,4 @@
-package calculationGasoline.cars.onBoardComputerCar.workData;
+package calculationGasoline.onBoardComputerCar.workData;
 
 import calculationGasoline.MenuGUI;
 
@@ -36,25 +36,16 @@ public class DataCounting {
         return resultNumber;
     }// end countNumber
 
-//    /**
-//     * resetGas() - reset static variable total gasoline
-//     */
-//    protected void resetValue(double value) {
-//        value = 0;
-//    }// end resetGas
-
     /**
      * findInFileGas(String str) - searches the history file for gasoline spent on it,
      * for writing his into variable to display all costs.
      * @param str - accepts a string as input to search for gasoline.
      */
-    public static void findInFileGas(String str){
-        setAllGas(0);
+    public static double findInFileGas(String str){
         String regex1 = "(Бензин\\s*:\\s*(\\d+,?(\\d*)))";
         Pattern pattern = Pattern.compile(regex1);
         Matcher matcher1 = pattern.matcher(str);
-        findFiles(matcher1,getAllGas());
-
+        return findFiles(matcher1,getAllGas());
     }//end find gas
 
     /**
@@ -62,11 +53,10 @@ public class DataCounting {
      * for writing them into variable to display all costs.
      * @param str - accepts a string as input to search for money.
      */
-    public static void findInFileMoney(String str){
-        setAllMoney(0);
+    public static double findInFileMoney(String str){
         String regex2 = "(Денег\\s*:\\s*(\\d+,?(\\d*)))";
         Matcher matcher2 = Pattern.compile(regex2).matcher(str);
-        findFiles(matcher2,getAllMoney());
+        return findFiles(matcher2,getAllMoney());
     } //end find money
 
     public static double findFiles(Matcher matcher, double writeResult){
@@ -105,10 +95,12 @@ public class DataCounting {
      * @return - returns a string with information about parameters of all gasoline costs and money for it
      */
     public static String reportTheTotal() {
+        String report = String.format("Общая сумма денег была потрачена на бензин : %.2f\n", getAllMoney()) +
+                String.format("Общее количество бензина израсходаванно : %.2f", getAllGas());
         setAllMoney(0);
         setAllGas(0);
-        return String.format("Общая сумма денег была потрачена на бензин : %.2f\n", getAllMoney()) +
-                String.format("Общее количество бензина израсходаванно : %.2f", getAllGas());
+        return report;
+
     }//end reportTheTotal
 
 

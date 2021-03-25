@@ -1,10 +1,12 @@
 package calculationGasoline.cars;
 
 
-import calculationGasoline.cars.onBoardComputerCar.OnBoardComputerCar;
-import calculationGasoline.cars.onBoardComputerCar.workData.CheckingEnteredData;
+import calculationGasoline.cars.enumsForCar.CarSpeedAndPetrol;
+import calculationGasoline.cars.enumsForCar.RoadLoad;
+import calculationGasoline.cars.interfacesForCar.MovementOnRoad;
+import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
 
-public class VolkswagenPolo extends Car implements ActionCar, MovementOnRoad {
+public class VolkswagenPolo extends Car implements MovementOnRoad {
 
     private double  speed = 0, gasolineCosts  = 0;
     private boolean conditioner = true, dynamicDriving = true;
@@ -35,9 +37,7 @@ public class VolkswagenPolo extends Car implements ActionCar, MovementOnRoad {
     public void setGasolineCosts(double gasolineCosts) {
         this.gasolineCosts = gasolineCosts;
     }
-
     //End Getter and Setter
-
 
     @Override
     public void drivingWithConditioningInCity(boolean conditioner, int traffic) {
@@ -64,7 +64,4 @@ public class VolkswagenPolo extends Car implements ActionCar, MovementOnRoad {
     public void drivingWithDynamicStyle(boolean dynamicDriving){
         if (dynamicDriving) setGasolineCosts(getGasolineCosts() + 2.0);
     }
-
-
-
 }

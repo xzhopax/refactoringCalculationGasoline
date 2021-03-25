@@ -1,10 +1,10 @@
-package calculationGasoline.cars.onBoardComputerCar.workData;
+package calculationGasoline.onBoardComputerCar.workData;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class CheckingEnteredData {
+public class CheckingEnteredData implements Check {
 
     /**
      * validDouble - checking a string for a number double

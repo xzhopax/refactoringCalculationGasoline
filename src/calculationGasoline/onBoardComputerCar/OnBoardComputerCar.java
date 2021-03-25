@@ -1,8 +1,8 @@
-package calculationGasoline.cars.onBoardComputerCar;
+package calculationGasoline.onBoardComputerCar;
 
 import calculationGasoline.cars.Car;
-import calculationGasoline.cars.onBoardComputerCar.workData.CheckingEnteredData;
-import calculationGasoline.cars.onBoardComputerCar.workData.DataCounting;
+import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
+import calculationGasoline.onBoardComputerCar.workData.DataCounting;
 import calculationGasoline.MenuGUI;
 
 import java.io.*;
@@ -12,15 +12,14 @@ public class OnBoardComputerCar {
     private String date;
     private double resultGas = 0, midGasoline = 0, distance = 0, price = 0;
     public int traffic = 0;
-
     private StringBuilder sb = new StringBuilder();
 
     private final Car car;
-
     public OnBoardComputerCar(Car car){
         this.car = car;
     }
 
+    //getter and setter
     public String getDate() {
         return date;
     }
@@ -39,45 +38,49 @@ public class OnBoardComputerCar {
     public void setMidGasoline(double midGasoline) {
         this.midGasoline = midGasoline;
     }
-
     public double getDistance() {
         return distance;
     }
-
     public void setDistance(double distance) {
         this.distance = distance;
     }
-
     public int getTraffic() {
         return traffic;
     }
-
     public void setTraffic(int traffic) {
         this.traffic = traffic;
     }
-
     public double getPrice() {
         return price;
     }
-
     public void setPrice(double price) {
         this.price = price;
     }
-
     public Car getCar() {
         return car;
     }
+    //end getter and setter
 
+    /**
+     * priceOnGasolineCosts - The method calculates the spent gasoline liters and the cost of this gasoline.
+     * 1. Formula for calculating the spent gasoline:
+     * Average consumption per 100 km * all the way (km) / 100 = spent liters.
+     * 2. The value formula of the spent gasoline = spent gasoline * on the price per liter
+     * @param distance - Distance traveled on car
+     * @param price - Cost 1 liter of gasoline
+     */
     public void priceOnGasolineCosts (double distance, double price) {
-        getCar().setGasolineCosts((getCar().getGasolineCosts() / 100) * distance);
+        getCar().setGasolineCosts((getCar().getGasolineCosts() * distance) / 100);
         setResultGas(getCar().getGasolineCosts() * price);
     }// end priceOnGasolineCosts
 
-//    public void priceInCityGAS(double distance, double price) {
-//        getCar().setGasolineCosts((getCar().getGasolineCosts() / 100) * distance);
-//        setResultGas(getCar().getGasolineCosts() * price);
-//    } // end priceInCityGAS
-
+    /**
+     * Checks the method CheckingEnteredData.isDateValidInString(date) that the date is entered correctly
+     * and if true, then writes the result
+     * else leaves the field empty
+     *
+     * @param date - Takes the date on the line in the form of a string
+     */
     public void todayDate(String date) {
         CheckingEnteredData.isDateValidInString(date);
         if (CheckingEnteredData.isDateValidInString(date)) {
@@ -127,6 +130,10 @@ public class OnBoardComputerCar {
         return sb.toString();
     } //end reportHighway
 
+    /**
+     * saveReport(String line) - save the report to a file
+     * @param line - takes a string as input to be written to a file
+     */
     protected void saveReport(String line) {
         try (Writer reportFile = new FileWriter
                 ("reportFile.txt", true)) {
@@ -150,8 +157,8 @@ public class OnBoardComputerCar {
                 sb.append((char) data);
                 data = reader.read();
             }
-            DataCounting.findInFileGas(sb.toString());
-            DataCounting.findInFileMoney(sb.toString());
+            DataCounting.setAllGas(DataCounting.findInFileGas(sb.toString()));
+            DataCounting.setAllMoney(DataCounting.findInFileMoney(sb.toString()));
         } catch (IOException e) {
             MenuGUI.error();
             e.printStackTrace();

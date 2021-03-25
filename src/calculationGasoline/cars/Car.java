@@ -1,6 +1,10 @@
 package calculationGasoline.cars;
 
-public abstract class Car implements ActionCar, MovementOnRoad {
+import calculationGasoline.cars.enumsForCar.CarSpeedAndPetrol;
+import calculationGasoline.cars.enumsForCar.RoadLoad;
+import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
+
+public abstract class Car {
 
     private final StringBuilder sb = new StringBuilder();
 
@@ -33,34 +37,28 @@ public abstract class Car implements ActionCar, MovementOnRoad {
     public void setGasolineCosts(double gasolineCosts) {
         this.gasolineCosts = gasolineCosts;
     }
+    //End Getter and Setter
 
-    @Override
-    public void onOffDynamicDriving(boolean dynamicDriving) {
-
-    }
-    @Override
-    public void onOffConditioner(boolean conditionerOn) {
-
-    }
-
-    @Override
-    public double gasolineConsumptionWithCarSpeed(double speed){
-
-        return 0;
-    }
-
-    @Override
     public void drivingWithConditioningInCity(boolean conditioner, int traffic) {
+        int thisTraffic = CheckingEnteredData.fixErrorTraffic(traffic);
 
+        if (conditioner)
+            setGasolineCosts(getGasolineCosts()
+                    + RoadLoad.CAR.getFuelConsumptionFromRoadLoad()[thisTraffic - 1] + 0.6);
+        else setGasolineCosts(getGasolineCosts()
+                + RoadLoad.CAR.getFuelConsumptionFromRoadLoad()[thisTraffic - 1]);
     }
 
-    @Override
     public void drivingWithConditioningOnHighway(boolean conditioner, double speed) {
-
+        setSpeed(speed);
+        if (conditioner)
+            setGasolineCosts(getGasolineCosts()
+                    + CarSpeedAndPetrol.CAR.returnGasolineConsumptionWithCarSpeed(speed) + 0.6);
+        else setGasolineCosts(getGasolineCosts()
+                + CarSpeedAndPetrol.CAR.returnGasolineConsumptionWithCarSpeed(speed));
     }
 
-    @Override
     public void drivingWithDynamicStyle(boolean dynamicDriving) {
-
+        if (dynamicDriving) setGasolineCosts(getGasolineCosts() + 2.5);
     }
 }
