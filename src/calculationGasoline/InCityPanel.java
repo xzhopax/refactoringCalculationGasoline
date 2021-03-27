@@ -2,7 +2,6 @@ package calculationGasoline;
 
 import calculationGasoline.cars.Car;
 import calculationGasoline.cars.CreateCar;
-import calculationGasoline.cars.VolkswagenPolo;
 import calculationGasoline.onBoardComputerCar.OnBoardComputerCar;
 import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
 
@@ -55,8 +54,9 @@ public class InCityPanel extends JFrame {
     private JLabel nameCar;
     private JComboBox choosingCar;
     private JLabel errorChoosingCar;
+    private JLabel choosingCarQuestion;
 
-    private Car car = CreateCar.getMapCars().get(1);
+    private Car car = CreateCar.getMapCreateCars().get(1);
     private OnBoardComputerCar computerCar = new OnBoardComputerCar(getCar());
 
     /**
@@ -90,7 +90,6 @@ public class InCityPanel extends JFrame {
         setVisible(true);// show panel
         add(getPanel());
 
-
         //I catch the program cross to confirm the exit
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent arg0) {
@@ -102,7 +101,7 @@ public class InCityPanel extends JFrame {
                 if (result == JOptionPane.YES_OPTION) {
                     System.exit(0);
                 }
-            }// end windowClosing
+        }// end windowClosing
         });//end anonymous class WindowAdapter (X)
 
         //when the textDate field loses focus, it checks if the date is correct,
@@ -182,7 +181,8 @@ public class InCityPanel extends JFrame {
                                 && Integer.parseInt(getTextTraffic().getText()) < 11
                                 && Integer.parseInt(getTextTraffic().getText()) >= 0) {
 
-                            getComputerCar().setTraffic(CheckingEnteredData.validIntegerInString(getTextTraffic().getText()));
+                            getComputerCar().setTraffic(
+                                    CheckingEnteredData.validIntegerInString(getTextTraffic().getText()));
                             getErrorTraffic().setText("");
                             getErrorMidGasoline().setText("");
 
@@ -191,7 +191,6 @@ public class InCityPanel extends JFrame {
                             getErrorTraffic().setText("Неправильно введен трафик");
                             getTextTraffic().setText("");
                         }
-
                     }// end focusLost
                 });//end of field textTraffic
             } // end actionPerformed
@@ -294,7 +293,7 @@ public class InCityPanel extends JFrame {
                 getErrorButton().setText("Заполните все поля");
             } else {
                 getErrorButton().setText("");
-                getCar().drivingWithConditioningInCity(getCar().isConditioner(),getComputerCar().getTraffic());
+                getCar().drivingWithOrNotConditioningInCity(getCar().isConditioner(),getComputerCar().getTraffic());
                 getCar().drivingWithDynamicStyle(getCar().isDynamicDriving());
                 getComputerCar().priceOnGasolineCosts(getComputerCar().getDistance(),getComputerCar().getPrice());
 
@@ -315,6 +314,9 @@ public class InCityPanel extends JFrame {
             }
         });// end button returnMenu
 
+        //Action on the choice of the car, if you leave the field blank,
+        // will display an error to choose a car if you choose a machine,
+        // clearing all fields for filling
         choosingCar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -322,135 +324,109 @@ public class InCityPanel extends JFrame {
                     getErrorChoosingCar().setForeground(Color.RED);
                     getErrorChoosingCar().setText("Выберите машину");
                     getChoosingCar().setSelectedIndex(0);
-                    setCar(CreateCar.getMapCars().get(1));
+                    setCar(CreateCar.getMapCreateCars().get(1));
                     setComputerCar(new OnBoardComputerCar(getCar()));
                 } else {
                     getErrorChoosingCar().setText("");
-                    setCar(CreateCar.getMapCars().get(getChoosingCar().getSelectedIndex()));
+                    setCar(CreateCar.getMapCreateCars().get(getChoosingCar().getSelectedIndex()));
                     setComputerCar(new OnBoardComputerCar(getCar()));
                     getTextDate().setText("");
                     getTextDistance().setText("");
                     getTextTraffic().setText("0");
                     getTextTraffic().setEnabled(false);
+                    getBeTraffic().setSelected(false);
                     getTextPrice().setText("");
                     getTextMidGasoline().setText("0");
-                    getTextMidGasoline().setEnabled(false);
+                    getTextMidGasoline().setEnabled(true);
+                    getBeMidGasoline().setSelected(true);
                     getConditionerOFF().setSelected(true);
                     getCar().setConditioner(false);
                     getDynamicDrivingOFF().setSelected(true);
                     getCar().setDynamicDriving(false);
-
                 }
             }
-        });
+        });//end choosingCar.addActionListener
     }// end constructor InCityPanel
 
     // down getter and setter
-
-    protected JTextField getTextDate() {
+    private JTextField getTextDate() {
         return textDate;
     }
-
-    protected JPanel getPanel() {
+    private JPanel getPanel() {
         return panel;
     }
-
-    protected JTextField getTextDistance() {
+    private JTextField getTextDistance() {
         return textDistance;
     }
-
-    protected JTextField getTextTraffic() {
+    private JTextField getTextTraffic() {
         return textTraffic;
     }
-
-    protected JRadioButton getConditionerON() {
+    private JRadioButton getConditionerON() {
         return conditionerON;
     }
-
-    protected JRadioButton getConditionerOFF() {
+    private JRadioButton getConditionerOFF() {
         return conditionerOFF;
     }
-
-    protected JRadioButton getDynamicDrivingON() {
+    private JRadioButton getDynamicDrivingON() {
         return dynamicDrivingON;
     }
-
-    protected JRadioButton getDynamicDrivingOFF() {
+    private JRadioButton getDynamicDrivingOFF() {
         return dynamicDrivingOFF;
     }
-
-    protected JButton getStart() {
+    private JButton getStart() {
         return start;
     }
-
-    protected JTextField getTextPrice() {
+    private JTextField getTextPrice() {
         return textPrice;
     }
-
-    protected JLabel getErrorDate() {
+    private JLabel getErrorDate() {
         return errorDate;
     }
-
-    protected JLabel getErrorDistance() {
+    private JLabel getErrorDistance() {
         return errorDistance;
     }
-
-    protected JLabel getErrorTraffic() {
+    private JLabel getErrorTraffic() {
         return errorTraffic;
     }
-
-    protected JLabel getErrorPrice() {
+    private JLabel getErrorPrice() {
         return errorPrice;
     }
-
-    protected JLabel getErrorButton() {
+    private JLabel getErrorButton() {
         return errorButton;
     }
-
-    protected JButton getReturnMenu() {
+    private JButton getReturnMenu() {
         return returnMenu;
     }
-
-    protected JTextField getTextMidGasoline() {
+    private JTextField getTextMidGasoline() {
         return textMidGasoline;
     }
-
-    protected JLabel getInMidGasoline() {
+    private JLabel getInMidGasoline() {
         return inMidGasoline;
     }
-
-    protected JLabel getErrorMidGasoline() {
+    private JLabel getErrorMidGasoline() {
         return errorMidGasoline;
     }
-
-    protected JRadioButton getBeMidGasoline() {
+    private JRadioButton getBeMidGasoline() {
         return beMidGasoline;
     }
-
-    protected JRadioButton getBeTraffic() {
+    private JRadioButton getBeTraffic() {
         return beTraffic;
     }
-
-    protected JComboBox getChoosingCar() {
+    private JComboBox getChoosingCar() {
         return choosingCar;
     }
-
-    protected JLabel getErrorChoosingCar() {
+    private JLabel getErrorChoosingCar() {
         return errorChoosingCar;
     }
-
-    protected Car getCar() {
+    private Car getCar() {
         return car;
     }
-
-    protected OnBoardComputerCar getComputerCar() {
+    private OnBoardComputerCar getComputerCar() {
         return computerCar;
     }
-
     private void setCar(Car car) {
         this.car = car;
     }
-
     private void setComputerCar(OnBoardComputerCar computerCar) {
         this.computerCar = computerCar;
     }

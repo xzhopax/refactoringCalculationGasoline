@@ -3,14 +3,24 @@ package calculationGasoline.cars;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * CreateCar - Class with auxiliary tools to create a class car
+ */
 public class CreateCar {
-    private static final Map<Integer, Car> mapCars = new TreeMap<>();
+
+    /**
+     * static final Map<Integer, Car> mapCreateCars - To get an instance of a class car.
+     * For use in methods choosingCar.addActionListener in InCityPanel and OnHighwayPanel
+     */
+    private static final Map<Integer, Car> mapCreateCars = new TreeMap<>();
     static {
-        mapCars.put(1,new VolkswagenPolo());
-        mapCars.put(2,new FordFocus3());
+        mapCreateCars.put(1,new VolkswagenPolo());
+        mapCreateCars.put(2,new FordFocus3());
     }
 
-    public static Map<Integer, Car> getMapCars() {
-        return mapCars;
+    //getter
+    public static Map<Integer, Car> getMapCreateCars() {
+        return mapCreateCars;
     }
+    //end getter
 }

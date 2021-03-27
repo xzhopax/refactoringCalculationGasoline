@@ -12,6 +12,35 @@ public class VolkswagenPolo extends Car {
     private double  speed = 0, gasolineCosts  = 0;
     private boolean conditioner = true, dynamicDriving = true;
 
+    //Explanations in the class
+    @Override
+    public void drivingWithOrNotConditioningInCity(boolean conditioner, int traffic) {
+       int thisTraffic = CheckingEnteredData.fixErrorTraffic(traffic);
+
+        if (conditioner)
+             setGasolineCosts(getGasolineCosts()
+                            + RoadLoad.VOLKSWAGEN_POLO.getFuelConsumptionFromRoadLoad()[thisTraffic - 1] + 0.5);
+        else setGasolineCosts(getGasolineCosts()
+                            + RoadLoad.VOLKSWAGEN_POLO.getFuelConsumptionFromRoadLoad()[thisTraffic - 1]);
+    }
+
+    //Explanations in the class
+    @Override
+    public void drivingWithOrNotConditioningOnHighway(boolean conditioner, double speed) {
+        setSpeed(speed);
+        if (conditioner)
+            setGasolineCosts(getGasolineCosts()
+                           + CarSpeedAndPetrol.VOLKSWAGEN_POLO.returnGasolineConsumptionWithCarSpeed(speed) + 0.5);
+        else setGasolineCosts(getGasolineCosts()
+                            + CarSpeedAndPetrol.VOLKSWAGEN_POLO.returnGasolineConsumptionWithCarSpeed(speed));
+    }
+
+    //Explanations in the class
+    @Override
+    public void drivingWithDynamicStyle(boolean dynamicDriving){
+        if (dynamicDriving) setGasolineCosts(getGasolineCosts() + 2.0);
+    }
+
     //Getter and Setter
     @Override
     public double getSpeed() {
@@ -50,30 +79,4 @@ public class VolkswagenPolo extends Car {
         return name;
     }
     //End Getter and Setter
-
-    @Override
-    public void drivingWithConditioningInCity(boolean conditioner, int traffic) {
-       int thisTraffic = CheckingEnteredData.fixErrorTraffic(traffic);
-
-        if (conditioner)
-             setGasolineCosts(getGasolineCosts()
-                            + RoadLoad.VOLKSWAGEN_POLO.getFuelConsumptionFromRoadLoad()[thisTraffic - 1] + 0.5);
-        else setGasolineCosts(getGasolineCosts()
-                            + RoadLoad.VOLKSWAGEN_POLO.getFuelConsumptionFromRoadLoad()[thisTraffic - 1]);
-    }
-
-    @Override
-    public void drivingWithConditioningOnHighway(boolean conditioner, double speed) {
-        setSpeed(speed);
-        if (conditioner)
-            setGasolineCosts(getGasolineCosts()
-                           + CarSpeedAndPetrol.VOLKSWAGEN_POLO.returnGasolineConsumptionWithCarSpeed(speed) + 0.5);
-        else setGasolineCosts(getGasolineCosts()
-                            + CarSpeedAndPetrol.VOLKSWAGEN_POLO.returnGasolineConsumptionWithCarSpeed(speed));
-    }
-
-    @Override
-    public void drivingWithDynamicStyle(boolean dynamicDriving){
-        if (dynamicDriving) setGasolineCosts(getGasolineCosts() + 2.0);
-    }
 }

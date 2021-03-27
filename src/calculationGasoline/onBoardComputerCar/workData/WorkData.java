@@ -10,19 +10,6 @@ public class WorkData {
     private static double allGas;
     private static double allMoney;
 
-    public static double getAllGas() {
-        return allGas;
-    }
-    public static void setAllGas(double allGas) {
-        WorkData.allGas = allGas;
-    }
-    public static double getAllMoney() {
-        return allMoney;
-    }
-    public static void setAllMoney(double allMoney) {
-        WorkData.allMoney = allMoney;
-    }
-
     /**
      * resetAllMoneyAndAllGas() - For setAllGas and setAllMoney sets values to 0
      */
@@ -143,13 +130,19 @@ public class WorkData {
         return sb.toString();
     }//end outDisplayReport
 
-
-
-
-
-
-
-
-
+    //getters and setters
+    public static double getAllGas() {
+        return allGas;
+    }
+    public static void setAllGas(double allGas) {
+        WorkData.allGas = allGas;
+    }
+    public static double getAllMoney() {
+        return allMoney;
+    }
+    public static void setAllMoney(double allMoney) {
+        WorkData.allMoney = allMoney;
+    }
+    //end getters and setters
 
 }

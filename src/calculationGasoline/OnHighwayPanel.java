@@ -1,16 +1,14 @@
 package calculationGasoline;
 
 import calculationGasoline.cars.Car;
+import calculationGasoline.cars.CreateCar;
 import calculationGasoline.onBoardComputerCar.OnBoardComputerCar;
 import calculationGasoline.cars.VolkswagenPolo;
 import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 /**
  * @author Aleksey Ilin
@@ -48,25 +46,12 @@ public class OnHighwayPanel extends JFrame {
     private JLabel speedQuestion;
     private JLabel distanceQuestion;
     private JLabel priceQuestion;
+    private JComboBox choosingCar;
+    private JLabel errorChoosingCar;
+    private JLabel choosingCarQuestion;
 
-   private Car car = new VolkswagenPolo();
-   private OnBoardComputerCar computerCar = new OnBoardComputerCar(car);
-
-    public Car getCar() {
-        return car;
-    }
-
-    public void setCar(Car car) {
-        this.car = car;
-    }
-
-    public OnBoardComputerCar getComputerCar() {
-        return computerCar;
-    }
-
-    public void setComputerCar(OnBoardComputerCar computerCar) {
-        this.computerCar = computerCar;
-    }
+    private Car car = new VolkswagenPolo();
+    private OnBoardComputerCar computerCar = new OnBoardComputerCar(car);
 
     /**
      *1. The constructor creates a panel with the specified parameters;
@@ -74,25 +59,21 @@ public class OnHighwayPanel extends JFrame {
      *3. sets the name of the panel;
      *4. makes it visible;
      *5. adds a panel to a container;
-     *
      *6. sets the action when you click on the cross;
-     *
      *7. through a getter sets the action for the date input field;
      *8. through the getter sets the action for the speed input field;
      *9. through a getter sets the action for the distance input field;
      *10 through a getter sets the action for the price entry field;
-     *
      *11. combines buttons for turning on and off the air conditioner into a group;
      *12. setting the values of buttons for the air conditioner from the car class;
      *13. groups the buttons for the use or absence of dynamic driving;
      *14. setting button values for dynamic driving from the car class;
-     *
      *15. sets the action when pressing the button for counting the entered values;
      *16. sets the action when pressing the button to return to the main menu
      */
 
     protected OnHighwayPanel() {
-        this.setBounds(400, 200, 600, 400);// initial window size
+        this.setBounds(400, 200, 600, 500);// initial window size
         this.setResizable(true); // you can make the window wider
         setTitle("расчет затрат бензина на трассе");//window title
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -238,7 +219,7 @@ public class OnHighwayPanel extends JFrame {
                 getErrorButton().setText("Заполните все поля");
             } else {
                 getErrorButton().setText("");
-                getCar().drivingWithConditioningOnHighway(getCar().isConditioner(),getCar().getSpeed());
+                getCar().drivingWithOrNotConditioningOnHighway(getCar().isConditioner(),getCar().getSpeed());
                 getCar().drivingWithDynamicStyle(getCar().isDynamicDriving());
                 getComputerCar().priceOnGasolineCosts(getComputerCar().getDistance(), getComputerCar().getPrice());
                 JOptionPane.showMessageDialog(null, getComputerCar().reportHighway());
@@ -257,73 +238,102 @@ public class OnHighwayPanel extends JFrame {
                 dispose();//clear memory main.gasProject.resources after hiding the window
             }
         }); // end anonymous class ActionListener (returnMenu)
+
+        //Action on the choice of the car, if you leave the field blank,
+        // will display an error to choose a car if you choose a machine,
+        // clearing all fields for filling
+        choosingCar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (getChoosingCar().getSelectedIndex() == 0) {
+                    getErrorChoosingCar().setForeground(Color.RED);
+                    getErrorChoosingCar().setText("Выберите машину");
+                    getChoosingCar().setSelectedIndex(0);
+                    setCar(CreateCar.getMapCreateCars().get(1));
+                    setComputerCar(new OnBoardComputerCar(getCar()));
+                } else {
+                    getErrorChoosingCar().setText("");
+                    setCar(CreateCar.getMapCreateCars().get(getChoosingCar().getSelectedIndex()));
+                    setComputerCar(new OnBoardComputerCar(getCar()));
+                    getTextDate().setText("");
+                    getTextDistance().setText("");
+                    getTextSpeed().setText("");
+                    getTextPrice().setText("");
+                    getConditionerOFF().setSelected(true);
+                    getCar().setConditioner(false);
+                    getDynamicDrivingOFF().setSelected(true);
+                    getCar().setDynamicDriving(false);
+                }
+            }
+        });//end choosingCar.addActionListener
     }// end constructor OnHighwayPanel
 
-    // down getter and setter
-
+    // down getters and setters
     protected JTextField getTextDate() {
         return textDate;
     }
-
     protected JTextField getTextSpeed() {
         return textSpeed;
     }
-
     protected JTextField getTextDistance() {
         return textDistance;
     }
-
     protected JTextField getTextPrice() {
         return textPrice;
     }
-
     protected JRadioButton getConditionerON() {
         return conditionerON;
     }
-
     protected JRadioButton getConditionerOFF() {
         return conditionerOFF;
     }
-
     protected JRadioButton getDynamicDrivingON() {
         return dynamicDrivingON;
     }
-
     protected JRadioButton getDynamicDrivingOFF() {
         return dynamicDrivingOFF;
     }
-
     protected JButton getStart() {
         return start;
     }
-
     protected JPanel getPanel() {
         return panel;
     }
-
     protected JLabel getErrorDate() {
         return errorDate;
     }
-
     protected JLabel getErrorSpeed() {
         return errorSpeed;
     }
-
     protected JLabel getErrorDistance() {
         return errorDistance;
     }
-
     protected JLabel getErrorPrice() {
         return errorPrice;
     }
-
     protected JLabel getErrorButton() {
         return errorButton;
     }
-
     protected JButton getReturnMenu() {
         return returnMenu;
     }
-
-
+    protected JComboBox getChoosingCar() {
+        return choosingCar;
+    }
+    protected JLabel getErrorChoosingCar() {
+        return errorChoosingCar;
+    }
+    protected Car getCar() {
+        return car;
+    }
+    protected void setCar(Car car) {
+        this.car = car;
+    }
+    protected OnBoardComputerCar getComputerCar() {
+        return computerCar;
+    }
+    protected void setComputerCar(OnBoardComputerCar computerCar) {
+        this.computerCar = computerCar;
+    }
+    //end getters and setters
 }// end class OnHighwayPanel

@@ -51,18 +51,14 @@ public class CheckingEnteredData implements Check {
         }
     }// end isDateValid
 
-
+    /**
+     * fixErrorTraffic - Catch an incorrect
+     * @param traffic - How many cork points in the city
+     * @return - If you go beyond 1 to 10, returns 1 or If true, then transmitted value
+     */
     public static int fixErrorTraffic(int traffic){
-        if (traffic == 0) return 1;
-        return traffic;
+        return (traffic == 0 || traffic == 11) ? 1 : traffic;
     }
-
-
-
-
-
-
-
 
 
 }
