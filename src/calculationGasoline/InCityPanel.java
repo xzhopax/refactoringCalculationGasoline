@@ -60,11 +60,6 @@ public class InCityPanel extends JFrame {
     private Car car = CreateCar.getMapCreateCars().get(1);
     private OnBoardComputerCar computerCar = new OnBoardComputerCar(getCar());
 
-
-    public void chekEnterDate(){
-       if(getTextDate().getText().equals("") || getTextDate().getText().isEmpty()) getTextDate().setText("01.01.1970");
-    }
-
     /**
      * 1.  The constructor creates a panel with the specified parameters;
      * 2.  allows you to stretch it;
