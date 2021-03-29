@@ -52,6 +52,7 @@
           </grid>
         </constraints>
         <properties>
+          <text value="01.01.1970"/>
           <toolTipText value="Пример 23.11.2014"/>
         </properties>
       </component>

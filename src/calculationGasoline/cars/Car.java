@@ -3,44 +3,29 @@ package calculationGasoline.cars;
 import calculationGasoline.cars.enumsForCar.CarSpeedAndPetrol;
 import calculationGasoline.cars.enumsForCar.NameCar;
 import calculationGasoline.cars.enumsForCar.RoadLoad;
-import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
 
 public abstract class Car {
     private final String name = NameCar.CAR.getName();
-    private double  speed = 0, gasolineCosts  = 0;
+    private final double maxSpeed = 200;
+    private double gasolineCosts  = 0;
     private boolean conditioner = true, dynamicDriving = true;
 
     /**
-     * drivingWithOrNotConditioningInCity - calculates the spent amount of
-     * gasoline when driving around the city with air conditioning or without air conditioning
-     *
-     * @param conditioner - Air conditioning on or off during a trip
-     * @param traffic - How many cork points in the city
+     * gasolineConsumption - Adds of field class gasolineCosts transferred value
+     * @param gasolineCosts - gasoline costs
      */
-    public void drivingWithOrNotConditioningInCity(boolean conditioner, int traffic) {
-        int thisTraffic = CheckingEnteredData.fixErrorTraffic(traffic); // fix out bound array
-
-        if (conditioner)
-            setGasolineCosts(getGasolineCosts()
-                    + RoadLoad.CAR.getFuelConsumptionFromRoadLoad()[thisTraffic - 1] + 0.6);
-        else setGasolineCosts(getGasolineCosts()
-                + RoadLoad.CAR.getFuelConsumptionFromRoadLoad()[thisTraffic - 1]);
+    public void gasolineConsumption (double gasolineCosts ){
+        setGasolineCosts(getGasolineCosts() + gasolineCosts);
     }
 
     /**
-     * drivingWithOrNotConditioningOnHighway - Calculates the spent the amount of
-     * gasoline when driving on the highway with air conditioning or without air conditioning
+     * drivingWithOrNotConditioning - if during the trip conditioner on, gasolineCosts +
+     * fuel consumption when working conditioner
      *
-     * @param conditioner - Air conditioning on or off during a trip
-     * @param speed - Average vehicle speed throughout the trip
+      * @param conditioner - During the trip conditioner on or off
      */
-    public void drivingWithOrNotConditioningOnHighway(boolean conditioner, double speed) {
-        setSpeed(speed);
-        if (conditioner)
-            setGasolineCosts(getGasolineCosts()
-                    + CarSpeedAndPetrol.CAR.returnGasolineConsumptionWithCarSpeed(speed) + 0.6);
-        else setGasolineCosts(getGasolineCosts()
-                + CarSpeedAndPetrol.CAR.returnGasolineConsumptionWithCarSpeed(speed));
+    public void drivingWithOrNotConditioning(boolean conditioner){
+        if (conditioner && getGasolineCosts() != 0) gasolineConsumption(getGasolineCosts() * 0.20);
     }
 
     /**
@@ -49,16 +34,31 @@ public abstract class Car {
      * @param dynamicDriving - Dynamic ride was used or not
      */
     public void drivingWithDynamicStyle(boolean dynamicDriving) {
-        if (dynamicDriving) setGasolineCosts(getGasolineCosts() + 2.5);
+        if (dynamicDriving && getGasolineCosts() != 0) gasolineConsumption(getGasolineCosts() * 0.30);
+    }
+
+    /**
+     * drivingWithOrNotConditioningInCity - calculates the spent amount of
+     * gasoline when driving around the city with air conditioning or without air conditioning
+     *
+     * @param traffic - How many cork points in the city
+     */
+    public void drivingInCity(int traffic) {
+//        int thisTraffic = CheckingEnteredData.fixErrorTraffic(traffic); // fix out bound array
+        gasolineConsumption(RoadLoad.CAR.getFuelConsumptionFromRoadLoad()[traffic]);
+    }
+
+    /**
+     * drivingWithOrNotConditioningOnHighway - Calculates the spent the amount of
+     * gasoline when driving on the highway with air conditioning or without air conditioning
+     *
+     * @param speed - Average vehicle speed throughout the trip
+     */
+    public void drivingOnHighway( double speed) {
+        gasolineConsumption(CarSpeedAndPetrol.CAR.returnGasolineConsumptionWithCarSpeed(speed));
     }
 
     //Getter and Setter
-    public double getSpeed() {
-        return speed;
-    }
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
     public boolean isConditioner() {
         return conditioner;
     }
@@ -79,6 +79,9 @@ public abstract class Car {
     }
     public String getName() {
         return name;
+    }
+    public double getMaxSpeed() {
+        return maxSpeed;
     }
     //End Getter and Setter
 }

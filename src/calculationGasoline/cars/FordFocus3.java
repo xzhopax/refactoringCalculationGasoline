@@ -3,52 +3,28 @@ package calculationGasoline.cars;
 import calculationGasoline.cars.enumsForCar.CarSpeedAndPetrol;
 import calculationGasoline.cars.enumsForCar.NameCar;
 import calculationGasoline.cars.enumsForCar.RoadLoad;
-import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
 
 public class FordFocus3 extends Car {
 
     private final String name = NameCar.FORD_FOCUS_3.getName();
-    private double  speed = 0, gasolineCosts  = 0;
+    private final double maxSpeed = 220;
+    private double gasolineCosts  = 0;
     private boolean conditioner = true, dynamicDriving = true;
 
-    //Explanations in the class
+    //Explanations in the class Car
     @Override
-    public void drivingWithOrNotConditioningInCity(boolean conditioner, int traffic) {
-        int thisTraffic = CheckingEnteredData.fixErrorTraffic(traffic);
-
-        if (conditioner)
-            setGasolineCosts(getGasolineCosts()
-                    + RoadLoad.FORD_FOCUS_3.getFuelConsumptionFromRoadLoad()[thisTraffic - 1] + 0.5);
-        else setGasolineCosts(getGasolineCosts()
-                + RoadLoad.FORD_FOCUS_3.getFuelConsumptionFromRoadLoad()[thisTraffic - 1]);
+    public void drivingInCity(int traffic) {
+//        int thisTraffic = CheckingEnteredData.fixErrorTraffic(traffic); // fix out bound array
+        gasolineConsumption(RoadLoad.FORD_FOCUS_3.getFuelConsumptionFromRoadLoad()[traffic]);
     }
 
-    //Explanations in the class
+    //Explanations in the class Car
     @Override
-    public void drivingWithOrNotConditioningOnHighway(boolean conditioner, double speed) {
-        setSpeed(speed);
-        if (conditioner)
-            setGasolineCosts(getGasolineCosts()
-                    + CarSpeedAndPetrol.FORD_FOCUS_3.returnGasolineConsumptionWithCarSpeed(speed) + 0.5);
-        else setGasolineCosts(getGasolineCosts()
-                + CarSpeedAndPetrol.FORD_FOCUS_3.returnGasolineConsumptionWithCarSpeed(speed));
-    }
-
-    //Explanations in the class
-    @Override
-    public void drivingWithDynamicStyle(boolean dynamicDriving){
-        if (dynamicDriving) setGasolineCosts(getGasolineCosts() + 2.0);
+    public void drivingOnHighway(double speed) {
+        gasolineConsumption(CarSpeedAndPetrol.FORD_FOCUS_3.returnGasolineConsumptionWithCarSpeed(speed));
     }
 
     //Getter and Setter
-    @Override
-    public double getSpeed() {
-        return speed;
-    }
-    @Override
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
     @Override
     public double getGasolineCosts() {
         return gasolineCosts;
@@ -76,6 +52,10 @@ public class FordFocus3 extends Car {
     @Override
     public String getName() {
         return name;
+    }
+    @Override
+    public double getMaxSpeed() {
+        return maxSpeed;
     }
     //End Getter and Setter
 

@@ -1,5 +1,6 @@
 package calculationGasoline.cars.enumsForCar;
 
+
 public enum CarSpeedAndPetrol {
 
     /**

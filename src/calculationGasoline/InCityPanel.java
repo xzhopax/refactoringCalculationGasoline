@@ -3,7 +3,7 @@ package calculationGasoline;
 import calculationGasoline.cars.Car;
 import calculationGasoline.cars.CreateCar;
 import calculationGasoline.onBoardComputerCar.OnBoardComputerCar;
-import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
+import calculationGasoline.onBoardComputerCar.workData.Check;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,34 +55,39 @@ public class InCityPanel extends JFrame {
     private JComboBox choosingCar;
     private JLabel errorChoosingCar;
     private JLabel choosingCarQuestion;
+    private JRadioButton disableRadioButton;
 
     private Car car = CreateCar.getMapCreateCars().get(1);
     private OnBoardComputerCar computerCar = new OnBoardComputerCar(getCar());
 
+
+    public void chekEnterDate(){
+       if(getTextDate().getText().equals("") || getTextDate().getText().isEmpty()) getTextDate().setText("01.01.1970");
+    }
+
     /**
-     * 1.The constructor creates a panel with the specified parameters;
-     * 2. allows you to stretch it;
-     * 3. sets the name of the panel;
-     * 4. makes it visible;
-     * 5. adds a panel to a container;
-     * <p>
-     * 6. sets the action when you click on the cross;
-     * <p>
-     * 7. through a getter sets the action for the date input field;
-     * 8. through a getter sets the action for the distance input field;
-     * 9. through the getter sets the action for the traffic input field;
-     * 10. through a getter sets the action for the price entry field;
-     * <p>
-     * 11. combines buttons for turning on and off the air conditioner into a group;
-     * 12. setting the values of buttons for the air conditioner from the car class;
-     * 13. groups the buttons for the use or absence of dynamic driving;
-     * 14. setting button values for dynamic driving from the car class;
-     * <p>
-     * 15. sets the action when pressing the button for counting the entered values;
-     * 16. sets the action when you press the button to return to the main menu.
+     * 1.  The constructor creates a panel with the specified parameters;
+     * 2.  allows you to stretch it;
+     * 3.  sets the name of the panel;
+     * 4.  makes it visible;
+     * 5.  adds a panel to a container;
+     * 6.  sets the action when you click on the cross;
+     * 7.  through a getter sets the value for the field selection of the car
+     * 8.  through a getter sets the action for the date input field;
+     * 9.  through a getter sets the action for the distance input field;
+     * 10. Buttons combining BeTraffic and BeMidGasoline
+     * 11. through the getter sets the action for the traffic input field;
+     * 12. through the getter sets the action for the midGasoline input field;                                                               MidGasoline
+     * 13. through a getter sets the action for the price entry field;
+     * 14. combines buttons for turning on and off the air conditioner into a group;
+     * 15. setting the values of buttons for the air conditioner from the car class;
+     * 16. groups the buttons for the use or absence of dynamic driving;
+     * 17. setting button values for dynamic driving from the car class;
+     * 18. sets the action when pressing the button for counting the entered values;
+     * 19. sets the action when you press the button to return to the main menu.
      */
 
-    protected InCityPanel() {
+    public InCityPanel() {
         this.setBounds(400, 200, 600, 500);// initial window size
         this.setResizable(true); // you can make the window wider
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -101,19 +106,55 @@ public class InCityPanel extends JFrame {
                 if (result == JOptionPane.YES_OPTION) {
                     System.exit(0);
                 }
-        }// end windowClosing
+            }// end windowClosing
         });//end anonymous class WindowAdapter (X)
+
+        //Action on the choice of the car, if you leave the field blank,
+        // will display an error to choose a car if you choose a machine,
+        // clearing all fields for filling
+        getChoosingCar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (getChoosingCar().getSelectedIndex()==0)
+                {// if error
+                    getErrorChoosingCar().setForeground(Color.RED);
+                    getErrorChoosingCar().setText("Выберите машину");
+                    getChoosingCar().setSelectedIndex(0);
+                    setCar(CreateCar.getMapCreateCars().get(1));
+                    setComputerCar(new OnBoardComputerCar(getCar()));
+                } else {
+                    getErrorChoosingCar().setText("");
+                    setCar(CreateCar.getMapCreateCars().get(getChoosingCar().getSelectedIndex()));
+                    setComputerCar(new OnBoardComputerCar(getCar()));
+                    getTextDate().setText("01.01.1970");
+                    getTextDistance().setText("");
+                    getTextTraffic().setText("0");
+                    getTextTraffic().setEnabled(false);
+                    getBeTraffic().setSelected(false);
+                    getTextPrice().setText("");
+                    getTextMidGasoline().setText("0");
+                    getTextMidGasoline().setEnabled(false);
+                    getBeMidGasoline().setSelected(false);
+                    getConditionerOFF().setSelected(true);
+                    getCar().setConditioner(false);
+                    getDynamicDrivingOFF().setSelected(true);
+                    getCar().setDynamicDriving(false);
+                }
+            }
+        });//end choosingCar.addActionListener
 
         //when the textDate field loses focus, it checks if the date is correct,
         // if not, it erases the value and asks to re-enter
         getTextDate().addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
+                getTextDate().setText("");
             }
 
             @Override
             public void focusLost(FocusEvent e) {
                 getComputerCar().todayDate(getTextDate().getText());
+                // if error
                 if (getComputerCar().getDate().equals("")) {
                     getErrorDate().setForeground(Color.RED);
                     getErrorDate().setText("Неправильно введена дата");
@@ -123,6 +164,7 @@ public class InCityPanel extends JFrame {
                 }
             }// end focusLost
         });//end of field textDate
+
 
         //when the textDistance field loses focus, it checks if the distance is correct,
         // if not, it erases the value and asks to re-enter
@@ -135,12 +177,11 @@ public class InCityPanel extends JFrame {
             @Override
             public void focusLost(FocusEvent e) {
                 // if the string number is double or an integer, then we write it to the variable distance
-                if (getTextDistance().getText().matches("(\\d+(\\.?\\d+))")
-                        || getTextDistance().getText().matches("\\d+")) {
-                    getComputerCar().setDistance(CheckingEnteredData.validDoubleInString(getTextDistance().getText()));
+                if (Check.checkStringContainceDoubleOrInteger(getTextDistance().getText()))
+                {
+                    getTextDistance().setText(Check.validDoubleInString(getTextDistance().getText()));
                     getErrorDistance().setText("");
-
-                } else {
+                } else { // else error
                     getErrorDistance().setForeground(Color.RED);
                     getErrorDistance().setText("Неправильно введена дистанция");
                     getTextDistance().setText("");
@@ -148,20 +189,22 @@ public class InCityPanel extends JFrame {
             }// end focusLost
         });//end of field textDistance
 
+        //Buttons combining BeTraffic and BeMidGasoline
         ButtonGroup groupTraffic = new ButtonGroup();
         groupTraffic.add(getBeTraffic());
         groupTraffic.add(getBeMidGasoline());
         getTextMidGasoline().setEnabled(false);
         getTextTraffic().setEnabled(false);
 
+
         //put a tick on the traffic field and make it active for entering and disable midGasoline
-        beTraffic.addActionListener(new ActionListener() {
+        getBeTraffic().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 getTextTraffic().setEnabled(true);
                 getTextMidGasoline().setEnabled(false);
-                getComputerCar().setMidGasoline(0);
+                getTextTraffic().setText("0");
                 getTextMidGasoline().setText("0");
                 getBeTraffic().setSelected(true);
 
@@ -171,25 +214,28 @@ public class InCityPanel extends JFrame {
 
                     @Override
                     public void focusGained(FocusEvent e) {
+                        getTextTraffic().setText("");
                     }
 
                     @Override
                     public void focusLost(FocusEvent e) {
 
                         // if the string number an integer, then we write it to the variable traffic
-                        if (getTextTraffic().getText().matches("\\d+")
-                                && Integer.parseInt(getTextTraffic().getText()) < 11
-                                && Integer.parseInt(getTextTraffic().getText()) >= 0) {
-
-                            getComputerCar().setTraffic(
-                                    CheckingEnteredData.validIntegerInString(getTextTraffic().getText()));
+                        if (getTextTraffic().getText() != null &&
+                            !getTextTraffic().getText().isEmpty() &&
+                            getTextTraffic().getText().matches("\\d+") &&
+                            Integer.parseInt(getTextTraffic().getText()) < 11 &&
+                            Integer.parseInt(getTextTraffic().getText()) >= 0)
+                        {
+                            getTextTraffic().setText(
+                                    Check.validIntegerInString(getTextTraffic().getText()));
                             getErrorTraffic().setText("");
                             getErrorMidGasoline().setText("");
 
                         } else {
                             getErrorTraffic().setForeground(Color.RED);
                             getErrorTraffic().setText("Неправильно введен трафик");
-                            getTextTraffic().setText("");
+                            getTextTraffic().setText("0");
                         }
                     }// end focusLost
                 });//end of field textTraffic
@@ -197,12 +243,13 @@ public class InCityPanel extends JFrame {
         }); // end beTraffic.addActionListener
 
         //put a tick on the MidGasoline field and make it active for entering and disable traffic
-        beMidGasoline.addActionListener(new ActionListener() {
+        getBeMidGasoline().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 getTextMidGasoline().setEnabled(true);
                 getTextTraffic().setEnabled(false);
-                getComputerCar().setTraffic(0);
+                getTextMidGasoline().setText("0");
                 getTextTraffic().setText("0");
                 getBeMidGasoline().setSelected(true);
 
@@ -211,24 +258,25 @@ public class InCityPanel extends JFrame {
                 getTextMidGasoline().addFocusListener(new FocusListener() {
                     @Override
                     public void focusGained(FocusEvent e) {
+                        getTextMidGasoline().setText("");
                     }
 
                     @Override
                     public void focusLost(FocusEvent e) {
 
                         // if the string number is double or an integer, then we write it to the variable distance
-                        if (getTextMidGasoline().getText().matches("(\\d+(\\.?\\d+))")
-                                || getTextMidGasoline().getText().matches("\\d+")) {
-                            getComputerCar().setMidGasoline(
-                                    CheckingEnteredData.validDoubleInString(getTextMidGasoline().getText()));
-                            getErrorMidGasoline().setText("");
-                            getErrorTraffic().setText("");
-
-                        } else {
-                            getErrorMidGasoline().setForeground(Color.RED);
-                            getErrorMidGasoline().setText("Неправильно введен средний расход");
-                            getTextMidGasoline().setText("");
-                        }
+                       if (getTextMidGasoline().getText() != null &&
+                           Check.checkStringContainceDoubleOrInteger(getTextMidGasoline().getText()))
+                       {
+                           getTextMidGasoline().setText(
+                                   Check.validDoubleInString(getTextMidGasoline().getText()));
+                           getErrorMidGasoline().setText("");
+                           getErrorTraffic().setText("");
+                       } else {
+                           getErrorMidGasoline().setForeground(Color.RED);
+                           getErrorMidGasoline().setText("Неправильно введен расход");
+                           getTextMidGasoline().setText("0");
+                       }
                     }// end focusLost
                 });//end of field textMidGasoline
             } // end actionPerformed
@@ -245,9 +293,10 @@ public class InCityPanel extends JFrame {
             @Override
             public void focusLost(FocusEvent e) {
                 // if the string number is double or an integer, then we write it to the variable price
-                if (getTextPrice().getText().matches("(\\d+(\\.?\\d+))")
-                        || getTextPrice().getText().matches("\\d+")) {
-                    getComputerCar().setPrice(CheckingEnteredData.validDoubleInString(getTextPrice().getText()));
+                if (getTextPrice().getText().matches("(\\d+(\\.?\\d+))") ||
+                    getTextPrice().getText().matches("\\d+"))
+                {
+                    getTextPrice().setText(Check.validDoubleInString(getTextPrice().getText()));
                     getErrorPrice().setText("");
                 } else {
                     getErrorPrice().setForeground(Color.RED);
@@ -286,16 +335,28 @@ public class InCityPanel extends JFrame {
         // it calculates the result and displays it
         getStart().addActionListener(e -> {
             // write the entered arguments into the method and get the result:
-            if (getTextDate().getText().equals("") || getTextDistance().getText().equals("") ||
-                    getTextTraffic().getText().equals("") || getTextPrice().getText().equals("")
-                    || getTextMidGasoline().getText().equals("") || getChoosingCar().getSelectedIndex() == 0 ) {
+            if (getTextDistance().getText().equals("") ||
+                getTextPrice().getText().equals("") ||
+                getTextMidGasoline().getText().equals("0") &&
+                getTextTraffic().getText().equals("0") ||
+                getChoosingCar().getSelectedIndex() == 0 )
+            {
                 getErrorButton().setForeground(Color.RED);
                 getErrorButton().setText("Заполните все поля");
             } else {
                 getErrorButton().setText("");
-                getCar().drivingWithOrNotConditioningInCity(getCar().isConditioner(),getComputerCar().getTraffic());
+                Check.chekEnterDate(getTextDate().getText());
+                getComputerCar().todayDate(getTextDate().getText());
+                if (getTextTraffic().getText().equals("0"))
+                {
+                    getCar().setGasolineCosts(Double.parseDouble(getTextMidGasoline().getText()));
+                } else if (getTextMidGasoline().getText().equals("0")){
+                    getCar().drivingInCity(Integer.parseInt(getTextTraffic().getText()));
+                }
+                getCar().drivingWithOrNotConditioning(getCar().isConditioner());
                 getCar().drivingWithDynamicStyle(getCar().isDynamicDriving());
-                getComputerCar().priceOnGasolineCosts(getComputerCar().getDistance(),getComputerCar().getPrice());
+                getComputerCar().priceOnGasolineCosts(Double.parseDouble(getTextDistance().getText()),
+                                                      Double.parseDouble(getTextPrice().getText()));
 
                 JOptionPane.showMessageDialog(null, getComputerCar().reportCity());
                 getComputerCar().resetGasAndResultGas();
@@ -314,38 +375,6 @@ public class InCityPanel extends JFrame {
             }
         });// end button returnMenu
 
-        //Action on the choice of the car, if you leave the field blank,
-        // will display an error to choose a car if you choose a machine,
-        // clearing all fields for filling
-        choosingCar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (getChoosingCar().getSelectedIndex()==0) {
-                    getErrorChoosingCar().setForeground(Color.RED);
-                    getErrorChoosingCar().setText("Выберите машину");
-                    getChoosingCar().setSelectedIndex(0);
-                    setCar(CreateCar.getMapCreateCars().get(1));
-                    setComputerCar(new OnBoardComputerCar(getCar()));
-                } else {
-                    getErrorChoosingCar().setText("");
-                    setCar(CreateCar.getMapCreateCars().get(getChoosingCar().getSelectedIndex()));
-                    setComputerCar(new OnBoardComputerCar(getCar()));
-                    getTextDate().setText("");
-                    getTextDistance().setText("");
-                    getTextTraffic().setText("0");
-                    getTextTraffic().setEnabled(false);
-                    getBeTraffic().setSelected(false);
-                    getTextPrice().setText("");
-                    getTextMidGasoline().setText("0");
-                    getTextMidGasoline().setEnabled(true);
-                    getBeMidGasoline().setSelected(true);
-                    getConditionerOFF().setSelected(true);
-                    getCar().setConditioner(false);
-                    getDynamicDrivingOFF().setSelected(true);
-                    getCar().setDynamicDriving(false);
-                }
-            }
-        });//end choosingCar.addActionListener
     }// end constructor InCityPanel
 
     // down getter and setter

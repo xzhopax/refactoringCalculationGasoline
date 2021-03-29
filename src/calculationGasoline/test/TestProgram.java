@@ -1,5 +1,6 @@
 package calculationGasoline.test;
 
+import calculationGasoline.InCityPanel;
 import calculationGasoline.cars.enumsForCar.CarSpeedAndPetrol;
 import calculationGasoline.onBoardComputerCar.workData.WorkData;
 import org.junit.Assert;
@@ -43,4 +44,6 @@ public class TestProgram {
 
         Assert.assertEquals(17.40, result, 0.01);
     }
+
+
 }

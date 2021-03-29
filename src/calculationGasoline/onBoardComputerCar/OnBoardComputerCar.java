@@ -1,14 +1,13 @@
 package calculationGasoline.onBoardComputerCar;
 
 import calculationGasoline.cars.Car;
-import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
+import calculationGasoline.onBoardComputerCar.workData.Check;
 import calculationGasoline.onBoardComputerCar.workData.WorkData;
 
 
 public class OnBoardComputerCar implements ActionOnBoardComputerCar {
     private String date;
-    private double resultGas = 0, midGasoline = 0, distance = 0, price = 0;
-    private int traffic = 0;
+    private double resultGas = 0;
     private StringBuilder sb = new StringBuilder();
 
     private Car car;
@@ -40,8 +39,8 @@ public class OnBoardComputerCar implements ActionOnBoardComputerCar {
      */
     @Override
     public void todayDate(String date) {
-        CheckingEnteredData.isDateValidInString(date);
-        if (CheckingEnteredData.isDateValidInString(date)) {
+        Check.isDateValidInString(date);
+        if (Check.isDateValidInString(date)) {
             setDate(date);
         } else {
             setDate("");
@@ -105,30 +104,6 @@ public class OnBoardComputerCar implements ActionOnBoardComputerCar {
     }
     public void setResultGas(double resultGas) {
         this.resultGas = resultGas;
-    }
-    public double getMidGasoline() {
-        return midGasoline;
-    }
-    public void setMidGasoline(double midGasoline) {
-        this.midGasoline = midGasoline;
-    }
-    public double getDistance() {
-        return distance;
-    }
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-    public int getTraffic() {
-        return traffic;
-    }
-    public void setTraffic(int traffic) {
-        this.traffic = traffic;
-    }
-    public double getPrice() {
-        return price;
-    }
-    public void setPrice(double price) {
-        this.price = price;
     }
     public Car getCar() {
         return car;

@@ -4,7 +4,7 @@ import calculationGasoline.cars.Car;
 import calculationGasoline.cars.CreateCar;
 import calculationGasoline.onBoardComputerCar.OnBoardComputerCar;
 import calculationGasoline.cars.VolkswagenPolo;
-import calculationGasoline.onBoardComputerCar.workData.CheckingEnteredData;
+import calculationGasoline.onBoardComputerCar.workData.Check;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,22 +54,23 @@ public class OnHighwayPanel extends JFrame {
     private OnBoardComputerCar computerCar = new OnBoardComputerCar(car);
 
     /**
-     *1. The constructor creates a panel with the specified parameters;
-     *2. allows you to stretch it;
-     *3. sets the name of the panel;
-     *4. makes it visible;
-     *5. adds a panel to a container;
-     *6. sets the action when you click on the cross;
-     *7. through a getter sets the action for the date input field;
-     *8. through the getter sets the action for the speed input field;
-     *9. through a getter sets the action for the distance input field;
-     *10 through a getter sets the action for the price entry field;
-     *11. combines buttons for turning on and off the air conditioner into a group;
-     *12. setting the values of buttons for the air conditioner from the car class;
-     *13. groups the buttons for the use or absence of dynamic driving;
-     *14. setting button values for dynamic driving from the car class;
-     *15. sets the action when pressing the button for counting the entered values;
-     *16. sets the action when pressing the button to return to the main menu
+     *1.  The constructor creates a panel with the specified parameters;
+     *2.  allows you to stretch it;
+     *3.  sets the name of the panel;
+     *4.  makes it visible;
+     *5.  adds a panel to a container;
+     *6.  sets the action when you click on the cross;
+     *7.  through a getter sets the value for the field selection of the car
+     *8.  through a getter sets the action for the date input field;
+     *9.  through the getter sets the action for the speed input field;
+     *10. through a getter sets the action for the distance input field;
+     *11. through a getter sets the action for the price entry field;
+     *12. combines buttons for turning on and off the air conditioner into a group;
+     *13. setting the values of buttons for the air conditioner from the car class;
+     *14. groups the buttons for the use or absence of dynamic driving;
+     *15. setting button values for dynamic driving from the car class;
+     *16. sets the action when pressing the button for counting the entered values;
+     *17. sets the action when pressing the button to return to the main menu
      */
 
     protected OnHighwayPanel() {
@@ -94,11 +95,41 @@ public class OnHighwayPanel extends JFrame {
             } // end windowClosing
         }); //end anonymous class WindowAdapter (X)
 
+        //Action on the choice of the car, if you leave the field blank,
+        // will display an error to choose a car if you choose a machine,
+        // clearing all fields for filling
+        getChoosingCar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (getChoosingCar().getSelectedIndex() == 0) {
+                    getErrorChoosingCar().setForeground(Color.RED);
+                    getErrorChoosingCar().setText("Выберите машину");
+                    getChoosingCar().setSelectedIndex(0);
+                    setCar(CreateCar.getMapCreateCars().get(1));
+                    setComputerCar(new OnBoardComputerCar(getCar()));
+                } else {
+                    getErrorChoosingCar().setText("");
+                    setCar(CreateCar.getMapCreateCars().get(getChoosingCar().getSelectedIndex()));
+                    setComputerCar(new OnBoardComputerCar(getCar()));
+                    getTextDate().setText("01.01.1970");
+                    getTextDistance().setText("");
+                    getTextSpeed().setText("");
+                    getTextPrice().setText("");
+                    getConditionerOFF().setSelected(true);
+                    getCar().setConditioner(false);
+                    getDynamicDrivingOFF().setSelected(true);
+                    getCar().setDynamicDriving(false);
+                }
+            }
+        });//end choosingCar.addActionListener
+
+        //When the text field catches the focus, erases everything from the field
         //when the textDate field loses focus, it checks if the date is correct,
-        // if not, it erases the value and asks to re-enter
+        // If not, it introduces in the field "01.01.1970"
         getTextDate().addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
+                getTextDate().setText("");
             }
 
             @Override
@@ -107,7 +138,7 @@ public class OnHighwayPanel extends JFrame {
                 if (getComputerCar().getDate().equals("")) {
                     getErrorDate().setForeground(Color.RED);
                     getErrorDate().setText("Неправильно введена дата");
-                    getTextDate().setText("");
+                    getTextDate().setText("01.01.1970");
                 } else {
                     getErrorDate().setText("");
                 }
@@ -123,15 +154,15 @@ public class OnHighwayPanel extends JFrame {
 
             @Override
             public void focusLost(FocusEvent e) {
-                // if the string number is double and less than 200, then we write it to a variable speed
-                if (getTextSpeed().getText().matches("(\\d+(\\.?\\d+))")
-                        && Double.parseDouble(getTextSpeed().getText()) <= 200
-                        || getTextSpeed().getText().matches("\\d+")
-                        && Integer.parseInt(getTextSpeed().getText()) <= 200) {
-                    getCar().setSpeed(CheckingEnteredData.validDoubleInString(getTextSpeed().getText()));
+                // if the string number is double and less than maxSpeed this car, then we write it to a variable speed
+                if (Check.checkStringContainceDouble(getTextSpeed().getText()) &&
+                    Double.parseDouble(getTextSpeed().getText()) <= getCar().getMaxSpeed() ||
+                    Check.checkStringContainceInteger(getTextSpeed().getText()) &&
+                    Integer.parseInt(getTextSpeed().getText()) <= getCar().getMaxSpeed())
+                {
+                    getTextSpeed().setText(Check.validDoubleInString(getTextSpeed().getText()));
                     getErrorSpeed().setText("");
                 } else {
-                    //
                     getErrorSpeed().setForeground(Color.RED);
                     getErrorSpeed().setText("Неправильно введена скорость");
                     getTextSpeed().setText("");
@@ -149,12 +180,11 @@ public class OnHighwayPanel extends JFrame {
 
             @Override
             public void focusLost(FocusEvent e) {
-                // if the string number is double or an integer, then we write it to the variable distance
-                if (getTextDistance().getText().matches("(\\d+(\\.?\\d+))")
-                        || getTextDistance().getText().matches("\\d+")) {
-                    getComputerCar().setDistance(CheckingEnteredData.validDoubleInString(getTextDistance().getText()));
+                // check, if the string number is double or an integer, if false - removes value
+                if (Check.checkStringContainceDoubleOrInteger(getTextDistance().getText()))
+                {
+                    getTextDistance().setText(Check.validDoubleInString(getTextDistance().getText()));
                     getErrorDistance().setText("");
-
                 } else {
                     getErrorDistance().setForeground(Color.RED);
                     getErrorDistance().setText("Неправильно введена дистанция");
@@ -172,10 +202,10 @@ public class OnHighwayPanel extends JFrame {
 
             @Override
             public void focusLost(FocusEvent e) {
-                //if the string number is double or an integer, then we write it to the variable price
-                if (getTextPrice().getText().matches("(\\d+(\\.?\\d+))")
-                        || getTextPrice().getText().matches("\\d+")) {
-                    getComputerCar().setPrice(CheckingEnteredData.validDoubleInString(getTextPrice().getText()));
+                //if the string number is double or an integer, then leaves the field content or cleaner field if false
+                if (Check.checkStringContainceDoubleOrInteger(getTextPrice().getText()))
+                {
+                    getTextPrice().setText(Check.validDoubleInString(getTextPrice().getText()));
                     getErrorPrice().setText("");
                 } else {
                     getErrorPrice().setForeground(Color.RED);
@@ -214,14 +244,19 @@ public class OnHighwayPanel extends JFrame {
         // it calculates the result and displays it
         getStart().addActionListener(e -> {
             if (getTextDate().getText().equals("") || getTextDistance().getText().equals("") ||
-                    getTextSpeed().getText().equals("") || getTextPrice().getText().equals("")) {
+                getTextSpeed().getText().equals("") || getTextPrice().getText().equals("") ||
+                getChoosingCar().getSelectedIndex() == 0 )
+            {
                 getErrorButton().setForeground(Color.RED);
                 getErrorButton().setText("Заполните все поля");
             } else {
                 getErrorButton().setText("");
-                getCar().drivingWithOrNotConditioningOnHighway(getCar().isConditioner(),getCar().getSpeed());
+                getCar().drivingOnHighway(Double.parseDouble(getTextSpeed().getText()));
+                getCar().drivingWithOrNotConditioning(getCar().isConditioner());
                 getCar().drivingWithDynamicStyle(getCar().isDynamicDriving());
-                getComputerCar().priceOnGasolineCosts(getComputerCar().getDistance(), getComputerCar().getPrice());
+                getComputerCar().priceOnGasolineCosts(Double.parseDouble(getTextDistance().getText()),
+                                                      Double.parseDouble(getTextPrice().getText()));
+
                 JOptionPane.showMessageDialog(null, getComputerCar().reportHighway());
                 getComputerCar().resetGasAndResultGas();   // reset in car gas = 0 and resultGas = 0
             }
@@ -238,34 +273,6 @@ public class OnHighwayPanel extends JFrame {
                 dispose();//clear memory main.gasProject.resources after hiding the window
             }
         }); // end anonymous class ActionListener (returnMenu)
-
-        //Action on the choice of the car, if you leave the field blank,
-        // will display an error to choose a car if you choose a machine,
-        // clearing all fields for filling
-        choosingCar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (getChoosingCar().getSelectedIndex() == 0) {
-                    getErrorChoosingCar().setForeground(Color.RED);
-                    getErrorChoosingCar().setText("Выберите машину");
-                    getChoosingCar().setSelectedIndex(0);
-                    setCar(CreateCar.getMapCreateCars().get(1));
-                    setComputerCar(new OnBoardComputerCar(getCar()));
-                } else {
-                    getErrorChoosingCar().setText("");
-                    setCar(CreateCar.getMapCreateCars().get(getChoosingCar().getSelectedIndex()));
-                    setComputerCar(new OnBoardComputerCar(getCar()));
-                    getTextDate().setText("");
-                    getTextDistance().setText("");
-                    getTextSpeed().setText("");
-                    getTextPrice().setText("");
-                    getConditionerOFF().setSelected(true);
-                    getCar().setConditioner(false);
-                    getDynamicDrivingOFF().setSelected(true);
-                    getCar().setDynamicDriving(false);
-                }
-            }
-        });//end choosingCar.addActionListener
     }// end constructor OnHighwayPanel
 
     // down getters and setters
